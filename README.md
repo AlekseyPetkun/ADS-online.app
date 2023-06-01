@@ -3,10 +3,10 @@
 
 Development team:
 
-[Алексей Петкун](https://github.com/Aleksey2710 "Aleksey2710")\
 [Ольга Филиппова](https://github.com/AgentOlga "AgentOlga")\
 [Никита Лаврентьев](https://github.com/NikitaLavrentiev "NikitaLavrentiev")\
-[Сергей Кузнецов](https://github.com/SerNike "SerNike")
+[Сергей Кузнецов](https://github.com/SerNike "SerNike")\
+[Алексей Петкун](https://github.com/Aleksey2710 "Aleksey2710")
 
 **Бэкенд-часть проекта предполагает реализацию следующего функционала:**
 
