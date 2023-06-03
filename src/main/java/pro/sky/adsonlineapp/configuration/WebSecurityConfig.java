@@ -1,4 +1,4 @@
-package pro.sky.adsonlineapp;
+package pro.sky.adsonlineapp.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

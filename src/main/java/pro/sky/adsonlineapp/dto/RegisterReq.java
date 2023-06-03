@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.dto;
 
 import lombok.Data;
+import pro.sky.adsonlineapp.constants.Role;
 
 @Data
 public class RegisterReq {
