@@ -1,7 +1,7 @@
 package pro.sky.adsonlineapp.service;
 
 import pro.sky.adsonlineapp.dto.RegisterReq;
-import pro.sky.adsonlineapp.dto.Role;
+import pro.sky.adsonlineapp.constants.Role;
 
 public interface AuthService {
     boolean login(String userName, String password);
