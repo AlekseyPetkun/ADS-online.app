@@ -3,7 +3,7 @@ package pro.sky.adsonlineapp.dto;
 import lombok.Data;
 
 @Data
-public class User {
+public class UserDto {
 
     private Integer id; // id пользователя
     private String email; // логин пользователя
