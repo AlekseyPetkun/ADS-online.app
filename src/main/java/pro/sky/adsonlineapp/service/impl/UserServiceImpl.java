@@ -2,21 +2,23 @@ package pro.sky.adsonlineapp.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pro.sky.adsonlineapp.dto.User;
-import pro.sky.adsonlineapp.model.UserEntity;
+import pro.sky.adsonlineapp.dto.UserDto;
+import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.UserRepository;
-import pro.sky.adsonlineapp.utils.impl.UserMapper;
+import pro.sky.adsonlineapp.service.UserService;
+import pro.sky.adsonlineapp.utils.MappingUtils;
 
-
-
-
+/**
+ * Бизнес-логика по работе с пользователями.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final MappingUtils<UserDto, User> userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository,
+                           MappingUtils<UserDto, User> userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
@@ -27,11 +29,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser() {
+    public UserDto getUser() {
         // todo: need to return currently logged in user (not the 1st user)
-        UserEntity user = userRepository.findById(1).orElse(null);
+        User user = userRepository.getReferenceById(1);
         if (user != null) {
-            return userMapper.mapToUserDto(user);
+            return userMapper.mapToDto(user);
         } else {
             return null;
         }
