@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.RegisterReq;
-import pro.sky.adsonlineapp.dto.Role;
+import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.service.AuthService;
 
 
