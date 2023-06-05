@@ -1,8 +1,8 @@
 package pro.sky.adsonlineapp.controllers;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.AdsDto;
+import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.service.AdsService;
 
 import java.util.Collection;
@@ -10,8 +10,8 @@ import java.util.Collection;
 /**
  * Контроллер объявлений.
  */
-@CrossOrigin(value = "http://localhost:3000")
 @RestController
+@CrossOrigin(value = "http://localhost:3000")
 @RequestMapping("/ads")
 public class AdsController {
 
@@ -22,15 +22,21 @@ public class AdsController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<AdsDto>> getAllAds() {
+    public Collection<AdsDto> getAllAds() {
 
         try {
-            return ResponseEntity.ok(adsService.getAllAds());
+            return adsService.getAllAds();
         } catch (RuntimeException e) {
             e.getStackTrace();
-            return ResponseEntity.notFound().build();
+            return null;
         }
     }
 
+    @PostMapping
+    public AdsDto addAd(@RequestBody CreateAds dto) {
+
+        AdsDto adsDto = adsService.addAd(dto);
+        return adsDto;
+    }
 
 }

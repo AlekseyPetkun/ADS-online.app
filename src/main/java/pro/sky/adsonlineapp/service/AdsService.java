@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.service;
 
 import pro.sky.adsonlineapp.dto.AdsDto;
+import pro.sky.adsonlineapp.dto.CreateAds;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface AdsService {
 
     List<AdsDto> getAllAds();
 
-//    AdsDto addAd();
+    AdsDto addAd(CreateAds createAds);
 }
