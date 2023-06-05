@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pro.sky.adsonlineapp.dto.User;
 import pro.sky.adsonlineapp.model.UserEntity;
 import pro.sky.adsonlineapp.repository.UserRepository;
-import pro.sky.adsonlineapp.utils.UserMapper;
+import pro.sky.adsonlineapp.utils.impl.UserMapper;
 
 
 
