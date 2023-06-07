@@ -16,10 +16,14 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
     @Column(name = "text")
     private String text;
+
+    public Comment(Long commentId) {
+        this.commentId = commentId;
+    }
 }
 
