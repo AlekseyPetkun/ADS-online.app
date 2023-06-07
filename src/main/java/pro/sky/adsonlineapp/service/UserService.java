@@ -12,5 +12,6 @@ public interface UserService {
     boolean setPassword(String currentPassword, String newPassword);
     UserDto getUser();
     boolean updateUser(User user);
-    boolean updateUserImage(MultipartFile image);
+    boolean updateUserPicture(MultipartFile picture);
 }
+
