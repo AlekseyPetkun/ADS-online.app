@@ -4,9 +4,9 @@ import pro.sky.adsonlineapp.constants.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NaturalId;
+//import org.hibernate.Hibernate;
+//import org.hibernate.annotations.CacheConcurrencyStrategy;
+//import org.hibernate.annotations.NaturalId;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.Objects;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @Entity
 @Slf4j
 @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "users")
 public class User {
 
@@ -33,7 +33,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
+
+    /**
+     * Логин пользователя
+     */
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * Имя пользователя
@@ -51,7 +57,7 @@ public class User {
      * mail пользователя
      */
     @Column(name = "email", nullable = false, unique = true)
-    @NaturalId
+//    @NaturalId
     private String email;
 
     /**
@@ -91,13 +97,13 @@ public class User {
         );
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return getEmail() != null && Objects.equals(getEmail(), user.getEmail());
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        User user = (User) o;
+//        return getEmail() != null && Objects.equals(getEmail(), user.getEmail());
+//    }
 
     @Override
     public int hashCode() {

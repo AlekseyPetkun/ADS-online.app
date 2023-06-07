@@ -5,6 +5,7 @@ import pro.sky.adsonlineapp.constants.Role;
 
 @Data
 public class RegisterReq {
+
     private String username;
     private String password;
     private String firstName;
