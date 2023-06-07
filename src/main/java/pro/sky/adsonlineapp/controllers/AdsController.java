@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +24,17 @@ import java.util.Collection;
 /**
  * Контроллер объявлений.
  */
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 @CrossOrigin(value = "http://localhost:3000")
-@RequestMapping("ads")
+@RequestMapping("/ads")
 @Tag(name = "API по работе с объявлениями",
         description = "CRUD-операции для работы с объявлениями")
+
 public class AdsController {
 
     private final AdsService adsService;
-    public AdsController(AdsService adsService) {
-        this.adsService = adsService;
-    }
 
     @GetMapping
     @Operation(
@@ -123,7 +125,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<Object> deleteAdById(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
