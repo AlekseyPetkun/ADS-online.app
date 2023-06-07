@@ -12,10 +12,10 @@ import pro.sky.adsonlineapp.model.Comment;
  */
 @RestController
 @CrossOrigin(value = "http://localhost:3000")
-@RequestMapping("/comment")
+@RequestMapping("/ads")
 public class CommentController {
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/comments")
     @Operation(
             summary = "Добавить комментарий к объявлению",
             description = "Нужно написать комментарий "
@@ -36,7 +36,7 @@ public class CommentController {
 
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/comments")
     @Operation(
             summary = "Получить комментарии объявления",
             description = "Нужно написать id автора "
@@ -58,7 +58,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{adId}/comments/{commentId}")
     @Operation(
             summary = "Удаление комментарий",
             description = "нужно написать комментарий id и рекламу id"
@@ -81,7 +81,7 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("{adId}/comments/{commentId}")
     @Operation(
             summary = "обновление комментария",
             description = "нужно написать комментарий id и рекламу id"
