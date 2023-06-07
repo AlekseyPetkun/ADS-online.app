@@ -3,7 +3,8 @@ package pro.sky.adsonlineapp.utils;
 /**
  * Сервис по работе с маппингом.
  *
- * @param <T> дто или сущность.
+ * @param <T>
+ * @param <R>
  */
 public interface MappingUtils<T, R> {
 

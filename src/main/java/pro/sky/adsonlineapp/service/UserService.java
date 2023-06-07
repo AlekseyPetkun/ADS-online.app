@@ -14,3 +14,4 @@ public interface UserService {
     boolean updateUser(User user);
     boolean updateUserPicture(MultipartFile picture);
 }
+
