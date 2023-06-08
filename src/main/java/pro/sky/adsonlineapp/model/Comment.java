@@ -11,13 +11,19 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "comments")
-public class Comments {
+@Table(name = "comment")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
-    @Column(name = "author")
-    private Integer author;
+    @ManyToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
+    private User author;
     @Column(name = "text")
     private String text;
+
+    public Comment(Long commentId) {
+        this.commentId = commentId;
+    }
 }
+

@@ -2,16 +2,14 @@ package pro.sky.adsonlineapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import pro.sky.adsonlineapp.model.Comment;
+import pro.sky.adsonlineapp.model.Ad;
 
 import java.util.List;
-
 @Data
-public class ResponseWrapperComment {
-    // общее количество комментариев
+public class ResponseWrapperAds {
+    // общее количество объявлений
     @JsonProperty("count")
     private Integer count;
-
     @JsonProperty("results")
-    private List<Comment> comments;
+    private List<Ad> comments;
 }
