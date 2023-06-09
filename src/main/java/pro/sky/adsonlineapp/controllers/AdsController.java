@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,9 +52,16 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<Collection<ResponseWrapperAds>> getAllAds() {
+    public ResponseEntity<ResponseWrapperAds> getAllAds() {
 
-        return ResponseEntity.ok().build();
+        try {
+            ResponseWrapperAds ads = adsService.getAllAds();
+            return ResponseEntity.ok(ads);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -75,11 +83,11 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds dto,
+    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image) {
 
-        AdsDto adsDto = adsService.addAd(dto);
-        return ResponseEntity.ok().build();
+        AdsDto adsDto = adsService.addAd(properties);
+        return ResponseEntity.ok().body(adsDto);
     }
 
     @GetMapping("/{id}")
@@ -103,7 +111,8 @@ public class AdsController {
     )
     public ResponseEntity<FullAds> getFullAdsById(@PathVariable Integer id) {
 
-        return ResponseEntity.ok().build();
+        FullAds dto = new FullAds();
+        return ResponseEntity.ok().body(dto);
     }
 
     @DeleteMapping("/{id}")
