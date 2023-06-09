@@ -30,10 +30,10 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы оставить комментарий необходимо авторизоваться"
     )
-    public ResponseEntity<?> addComment(@PathVariable("id") int id,
+    public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                          @RequestBody CreateComment comments) {
-
-        return ResponseEntity.ok(comments);
+            Comment comment = new Comment();
+        return ResponseEntity.ok(comment);
     }
 
 
