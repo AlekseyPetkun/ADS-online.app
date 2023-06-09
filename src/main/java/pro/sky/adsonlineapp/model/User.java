@@ -1,7 +1,7 @@
 package pro.sky.adsonlineapp.model;
 
 import pro.sky.adsonlineapp.constants.Role;
-import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 //import org.hibernate.Hibernate;
@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 //import org.hibernate.annotations.NaturalId;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -17,7 +19,7 @@ import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+//@Builder
 @Getter
 @Setter
 @Entity
@@ -83,19 +85,21 @@ public class User {
     /**
      * Права доступа пользователя
      */
-    @Column(name = "role", nullable = false)
+    @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Role role = Role.USER;
+//    @Builder.Default
+    private Role role;
 
-    @PostPersist
-    public void logUserAdded() {
-        log.info(
-                "Added user: email={}, role={}",
-                email,
-                role
-        );
-    }
+    private String image;
+
+//    @PostPersist
+//    public void logUserAdded() {
+//        log.info(
+//                "Added user: email={}, role={}",
+//                email,
+//                role
+//        );
+//    }
 
 //    @Override
 //    public boolean equals(Object o) {
@@ -105,8 +109,15 @@ public class User {
 //        return getEmail() != null && Objects.equals(getEmail(), user.getEmail());
 //    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email);
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(email);
+//    }
+
+    public User(String firstName, String lastName, String email, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
     }
 }
