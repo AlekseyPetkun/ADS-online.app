@@ -19,6 +19,10 @@ import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -83,10 +87,12 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
-                                        @RequestPart(name = "image") MultipartFile image) {
 
-        AdsDto adsDto = adsService.addAd(properties);
+    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
+                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
+
+        AdsDto adsDto = adsService.addAd(properties, image);
+
         return ResponseEntity.ok().body(adsDto);
     }
 
@@ -109,7 +115,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<FullAds> getFullAdsById(@PathVariable Integer id) {
+    public ResponseEntity<FullAds> getAds(@PathVariable Integer id) {
 
         FullAds dto = new FullAds();
         return ResponseEntity.ok().body(dto);
@@ -134,7 +140,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
+    public ResponseEntity<?> removeAd(@PathVariable Integer id) {
         return ResponseEntity.ok().build();
     }
 
@@ -161,7 +167,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<AdsDto> updateAdById(@PathVariable Integer id,
+    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                                @RequestBody CreateAds dto) {
 
         return ResponseEntity.ok().build();
@@ -186,7 +192,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<ResponseWrapperAds> getFullAdsMe() {
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
 
         return ResponseEntity.ok().build();
     }
@@ -214,7 +220,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<Picture> updateImageById(@PathVariable Integer id,
+    public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
                                                    @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
