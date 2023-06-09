@@ -51,7 +51,7 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
-    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") int id) {
+    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id) {
         //Создание нового объекта ResponseWrapperComment,
         //который будет заполнен данными о комментариях и
         //возвращен в качестве ответа на запрос.
