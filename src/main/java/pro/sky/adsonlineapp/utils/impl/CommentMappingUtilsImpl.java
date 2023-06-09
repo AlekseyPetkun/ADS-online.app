@@ -1,5 +1,6 @@
 package pro.sky.adsonlineapp.utils.impl;
 
+import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.utils.MappingUtils;
@@ -7,6 +8,7 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CommentMappingUtilsImpl implements MappingUtils<ResponseWrapperComment, Comment> {
 
     @Override
@@ -20,12 +22,7 @@ public class CommentMappingUtilsImpl implements MappingUtils<ResponseWrapperComm
 
     @Override
     public Comment mapToEntity(ResponseWrapperComment dto) {
-        Comment comment = new Comment();
-        List<Comment> comments = dto.getComments();
-        if (comments != null && !comments.isEmpty()) {
-            comment = comments.get(0);
-        }
-        return comment;
+        return null;
     }
-    }
+}
 
