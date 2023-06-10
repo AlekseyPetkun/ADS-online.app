@@ -14,6 +14,7 @@ public class FullAdsMappingUtilsImpl implements MappingUtils<FullAds, Ad> {
 
     @Override
     public FullAds mapToDto(Ad entity) {
+
         FullAds dto = new FullAds();
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
@@ -29,17 +30,17 @@ public class FullAdsMappingUtilsImpl implements MappingUtils<FullAds, Ad> {
     }
 
     @Override
-    public Ad mapToEntity(FullAds dto) {
+    public Ad mapToEntity(FullAds dto) { // не нужная реализация
 
-        User author = new User(dto.getAuthorFirstName(), dto.getAuthorLastName(), dto.getEmail(), dto.getPhone());
-        Ad adsEntity = new Ad();
-        adsEntity.setDescription(dto.getDescription());
-        adsEntity.setPk(dto.getPk());
-        adsEntity.setPrice(dto.getPrice());
-        adsEntity.setTitle(dto.getTitle());
-        adsEntity.setAuthor(author);
+//        User author = new User(dto.getAuthorFirstName(), dto.getAuthorLastName(), dto.getEmail(), dto.getPhone());
+//        Ad adsEntity = new Ad();
+//        adsEntity.setDescription(dto.getDescription());
+//        adsEntity.setPk(dto.getPk());
+//        adsEntity.setPrice(dto.getPrice());
+//        adsEntity.setTitle(dto.getTitle());
+//        adsEntity.setAuthor(author);
 //        adsEntity.setImage(dto.getImage());
 
-        return adsEntity;
+        return null;
     }
 }
