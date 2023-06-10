@@ -9,6 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collection;
 
+/**
+ * Сущность объявления.
+ */
 @Entity
 @Getter
 @Setter
