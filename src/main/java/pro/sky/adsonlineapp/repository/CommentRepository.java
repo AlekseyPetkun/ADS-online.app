@@ -9,10 +9,15 @@ import pro.sky.adsonlineapp.model.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-
-    @Query("UPDATE Comment SET " +
-            "Comment.text = :text" +
-            " WHERE Comment.commentId = :id and Comment.ad.pk = :pk")
+    /**
+     *
+     * @param pk
+     * @param commentId
+     * @return
+     */
+    @Query("UPDATE Comment a SET " +
+            "a.text = :text" +
+            " WHERE a.commentId = :commentId and a.ad.pk = :adId")
     Comment updateCommentById(
             @Param("adId") Integer pk,
             @Param("commentId") Integer commentId);

@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
@@ -56,6 +57,7 @@ public class CommentServiceImpl implements CommentService {
         }
     }
     @Override
+    @Transactional
     public CommentDto updateComment(Integer adId, Integer commentId) {
         Ad ad = adsRepository.findById(adId).orElse(null);
         Comment comment = commentRepository.findById(commentId).orElse(null);

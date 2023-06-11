@@ -2,27 +2,26 @@ package pro.sky.adsonlineapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
-import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.service.CommentService;
 
 /**
  * контроллер для работы с комментариями
  */
-@RestController
+@Slf4j
 @CrossOrigin(value = "http://localhost:3000")
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class CommentController {
 
     private final CommentService commentService;
-
-    public CommentController( CommentService commentService) {
-        this.commentService = commentService;
-    }
 
     @PostMapping("/{id}/comments")
     @Operation(
