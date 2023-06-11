@@ -13,6 +13,7 @@ public interface UserService {
     UserDto getUser();
     boolean updateUser(User user);
 
+
     boolean updateUserImage(MultipartFile image);
 }
 
