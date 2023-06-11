@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -128,6 +129,15 @@ public class AdsServiceImpl implements AdsService {
     public ResponseWrapperAds getAdsMe() {
 
         List<AdsDto> dto = adsRepository.findAll().stream()
+                .map(adsMapping::mapToDto)
+                .collect(Collectors.toList());
+        return new ResponseWrapperAds(dto.size(), dto);
+    }
+
+    @Override
+    public ResponseWrapperAds findByDescriptionAd(String description) {
+
+        List<AdsDto> dto = adsRepository.findByDescriptionContainingIgnoreCase(description).stream()
                 .map(adsMapping::mapToDto)
                 .collect(Collectors.toList());
         return new ResponseWrapperAds(dto.size(), dto);
