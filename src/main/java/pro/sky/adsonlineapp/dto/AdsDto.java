@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO объявления.
+ */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class AdsDto {
 
     private Integer author;
@@ -14,11 +18,4 @@ public class AdsDto {
     private Integer price;
     private String title;
 
-    public AdsDto(Integer author, String image, Integer pk, Integer price, String title) {
-        this.author = author;
-        this.image = image;
-        this.pk = pk;
-        this.price = price;
-        this.title = title;
-    }
 }

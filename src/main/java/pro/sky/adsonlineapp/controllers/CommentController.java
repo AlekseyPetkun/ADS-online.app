@@ -2,20 +2,26 @@ package pro.sky.adsonlineapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
-import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.model.Comment;
+import pro.sky.adsonlineapp.service.CommentService;
 
 /**
  * контроллер для работы с комментариями
  */
-@RestController
+@Slf4j
 @CrossOrigin(value = "http://localhost:3000")
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/ads")
 public class CommentController {
+
+    private final CommentService commentService;
 
     @PostMapping("/{id}/comments")
     @Operation(
@@ -32,7 +38,7 @@ public class CommentController {
     )
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                          @RequestBody CreateComment comments) {
-            Comment comment = new Comment();
+        Comment comment = commentService.saveComment(id, comments);
         return ResponseEntity.ok(comment);
     }
 
@@ -51,13 +57,9 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
-    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id) {
-        //Создание нового объекта ResponseWrapperComment,
-        //который будет заполнен данными о комментариях и
-        //возвращен в качестве ответа на запрос.
-        ResponseWrapperComment response = new ResponseWrapperComment();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<CommentDto> getComments(@PathVariable("id") Integer id) {
+        CommentDto commentDto = commentService.getComments(id);
+        return ResponseEntity.ok(commentDto);
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -79,8 +81,7 @@ public class CommentController {
     )
     public ResponseEntity<Object> deleteComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId) {
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId));
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
@@ -102,8 +103,8 @@ public class CommentController {
     )
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                   @PathVariable Integer commentId,
-                                                  @RequestBody CommentDto commentDto) {
-
-        return ResponseEntity.ok().build();
+                                                  @RequestBody Comment comment) {
+        CommentDto commentDto1 = commentService.updateComment(adId, commentId);
+        return ResponseEntity.ok().body(commentDto1);
     }
     }
