@@ -20,7 +20,6 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
     private final MappingUtils<CreateComment, Comment> createComments;
-
     private final MappingUtils<CommentDto, Comment> comments;
 
     public CommentServiceImpl(ValidationService validationService, CommentRepository commentRepository, AdsRepository adsRepository, MappingUtils<CreateComment, Comment> createComments, MappingUtils<CommentDto, Comment> comments) {
@@ -39,7 +38,8 @@ public class CommentServiceImpl implements CommentService {
         }
         Comment entity = createComments.mapToEntity(dto);
         commentRepository.save(entity);
-        Comment entityOne = commentRepository.getReferenceById(entity.getCommentId().intValue());
+        Comment entityOne = commentRepository.findById(entity.getCommentId().intValue())
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
         return entityOne;
     }
 
@@ -74,7 +74,8 @@ public class CommentServiceImpl implements CommentService {
 @Override
     public CommentDto getComments(Integer id){
 
-    Comment comment = commentRepository.getReferenceById(id);
+    Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
         if (comment == null) {
             throw new NotFoundEntityException("такого комментария нет");
         }

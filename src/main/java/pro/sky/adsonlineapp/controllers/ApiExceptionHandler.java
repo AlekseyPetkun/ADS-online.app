@@ -12,15 +12,14 @@ import pro.sky.adsonlineapp.exceptions.ValidationException;
 public class ApiExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity handlerValidationException(ValidationException e) {
+    public ResponseEntity<String> handlerValidationException(ValidationException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler
-    public ResponseEntity handlerNotFoundEntityException(NotFoundEntityException e) {
+    public ResponseEntity<String> handlerNotFoundEntityException(NotFoundEntityException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
-
 
 
 }
