@@ -24,6 +24,7 @@ public interface AdsRepository extends JpaRepository<Ad, Integer> {
      * @param pk          идентификатор объявления
      * @return измененная сущность объявления
      */
+    @Modifying
     @Query("UPDATE Ad a SET " +
             "a.description = :description, " +
             "a.price = :price," +
