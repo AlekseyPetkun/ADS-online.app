@@ -18,6 +18,7 @@ import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.MappingUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -74,7 +75,8 @@ public class AdsServiceImpl implements AdsService {
 
         adsRepository.save(entity);
 
-        Ad entity1 = adsRepository.getReferenceById(entity.getPk());
+        Ad entity1 = adsRepository.findById(entity.getPk())
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
 
         AdsDto adsDto = adsMapping.mapToDto(entity1);
 
@@ -84,7 +86,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public FullAds getFullAdsById(Integer id) {
 
-        Ad entity = adsRepository.getReferenceById(id);
+        Ad entity = adsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));;
         if (entity == null) {
             throw new NotFoundEntityException("Сущность отсутствует!");
         }
@@ -95,7 +98,8 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public boolean deleteAdById(Integer id) {
 
-        Ad entity = adsRepository.getReferenceById(id);
+        Ad entity = adsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));;
         if (entity == null) {
             throw new NotFoundEntityException("Сущность отсутствует!");
         } else {
@@ -108,7 +112,8 @@ public class AdsServiceImpl implements AdsService {
     @Transactional
     public AdsDto updateAdsById(Integer id, CreateAds dto) {
 
-        Ad entity = adsRepository.getReferenceById(id);
+        Ad entity = adsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
 
         if (entity == null) {
             throw new NotFoundEntityException("Сущность отсутствует!");
