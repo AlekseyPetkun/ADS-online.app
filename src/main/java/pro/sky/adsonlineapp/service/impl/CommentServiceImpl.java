@@ -37,10 +37,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ValidationException(dto.toString());
         }
         Comment entity = createComments.mapToEntity(dto);
-        commentRepository.save(entity);
-        Comment entityOne = commentRepository.findById(entity.getCommentId().intValue())
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
-        return entityOne;
+        return commentRepository.save(entity);
     }
 
     @Override
