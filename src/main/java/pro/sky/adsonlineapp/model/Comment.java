@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * Сущность комментария
+ */
 @Entity
 @Getter
 @Setter

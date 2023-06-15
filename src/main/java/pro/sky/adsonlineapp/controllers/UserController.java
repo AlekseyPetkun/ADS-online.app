@@ -23,6 +23,9 @@ import org.springframework.http.MediaType;
 ;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Контроллер для работы с пользователями
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

@@ -2,6 +2,9 @@ package pro.sky.adsonlineapp.dto;
 
 import lombok.Data;
 
+/**
+ * DTO комментария.
+ */
 @Data
 public class CommentDto {
 

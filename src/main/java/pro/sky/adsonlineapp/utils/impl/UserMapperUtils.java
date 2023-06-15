@@ -1,15 +1,16 @@
 package pro.sky.adsonlineapp.utils.impl;
 
 import org.springframework.stereotype.Service;
+import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.UserDto;
+import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.model.User;
-import pro.sky.adsonlineapp.utils.MappingUtils;
 
 /**
  * Бизнес-логика по маппингу пользователей (UserDto).
  */
 @Service
-public class UserMapper implements MappingUtils<UserDto, User> {
+public class UserMapperUtils {
 
     public User mapToEntity(UserDto dto) {
 

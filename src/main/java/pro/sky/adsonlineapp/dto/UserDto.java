@@ -2,6 +2,9 @@ package pro.sky.adsonlineapp.dto;
 
 import lombok.Data;
 
+/**
+ * DTO пользователей.
+ */
 @Data
 public class UserDto {
 

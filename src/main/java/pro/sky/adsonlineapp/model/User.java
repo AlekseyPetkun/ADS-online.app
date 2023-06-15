@@ -11,17 +11,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
- * Модель пользователя
+ * Сущность пользователя
  */
 
 @NoArgsConstructor
 @AllArgsConstructor
 //@Builder
-@Getter
-@Setter
+@Data
 @Entity
 @Slf4j
 @Cacheable
@@ -40,8 +38,8 @@ public class User {
     /**
      * Логин пользователя
      */
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username")
+    private String username;
 
     /**
      * Имя пользователя
@@ -67,6 +65,9 @@ public class User {
      */
     @Column(name = "password")
     private String password;
+
+    @Column(name = "enabled")
+    private boolean enabled;
 
     /**
      * Телефон пользователя
@@ -113,11 +114,4 @@ public class User {
 //    public int hashCode() {
 //        return Objects.hash(email);
 //    }
-
-    public User(String firstName, String lastName, String email, String phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-    }
 }

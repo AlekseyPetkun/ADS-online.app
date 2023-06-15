@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.utils.impl;
 
 import org.springframework.stereotype.Service;
+import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.model.User;
@@ -10,9 +11,8 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
  * Бизнес-логика по маппингу объявлений (FullAds).
  */
 @Service
-public class FullAdsMappingUtilsImpl implements MappingUtils<FullAds, Ad> {
+public class FullAdsMappingUtils {
 
-    @Override
     public FullAds mapToDto(Ad entity) {
 
         FullAds dto = new FullAds();
@@ -29,7 +29,6 @@ public class FullAdsMappingUtilsImpl implements MappingUtils<FullAds, Ad> {
         return dto;
     }
 
-    @Override
     public Ad mapToEntity(FullAds dto) { // не нужная реализация
 
 //        User author = new User(dto.getAuthorFirstName(), dto.getAuthorLastName(), dto.getEmail(), dto.getPhone());

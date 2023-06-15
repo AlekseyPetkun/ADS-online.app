@@ -2,11 +2,17 @@ package pro.sky.adsonlineapp.utils.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CommentDto;
+import pro.sky.adsonlineapp.dto.CreateAds;
+import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.model.Comment;
+import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.utils.MappingUtils;
+
+/**
+ * Бизнес-логика по маппингу комментариев (Comment).
+ */
 @Service
-public class CommentMappingUtilsImpl implements MappingUtils<CommentDto, Comment> {
-    @Override
+public class CommentMappingUtils {
     public CommentDto mapToDto(Comment entity) {
         CommentDto dto = new CommentDto();
         dto.setAuthor(entity.getAuthor().getId());
@@ -15,7 +21,6 @@ public class CommentMappingUtilsImpl implements MappingUtils<CommentDto, Comment
         return dto;
     }
 
-    @Override
     public Comment mapToEntity(CommentDto dto) {
         Comment entity = new Comment();
         entity.setCommentId(dto.getPk());

@@ -10,6 +10,7 @@ import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.model.Ad;
 
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -27,11 +28,12 @@ public interface AdsService {
     /**
      * Добавить объявление
      *
-     * @param dto   тело запроса
-     * @param image картинка товара
+     * @param dto         тело запроса
+     * @param image       картинка товара
+     * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto addAd(CreateAds dto, MultipartFile image);
+    AdsDto addAd(CreateAds dto, MultipartFile image, UserDetails userDetails);
 
     /**
      * Получить информацию об объявлении по id
@@ -44,29 +46,33 @@ public interface AdsService {
     /**
      * Удалить объявление по id
      *
-     * @param id идентификатор объявления
+     * @param id          идентификатор объявления
+     * @param userDetails информация о пользователе
      * @return true or false
      */
-    boolean deleteAdById(Integer id);
+    boolean deleteAdById(Integer id, UserDetails userDetails);
 
     /**
      * Обновить информацию об объявлении по id
      *
-     * @param id  идентификатор объявления
-     * @param dto тело изменения
+     * @param id          идентификатор объявления
+     * @param dto         тело изменения
+     * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto updateAdsById(Integer id, CreateAds dto);
+    AdsDto updateAdsById(Integer id, CreateAds dto, UserDetails userDetails);
 
     /**
      * Получить объявления авторизованного пользователя
      *
+     * @param userDetails информация о пользователе
      * @return объявления пользователя
      */
-    ResponseWrapperAds getAdsMe();
+    ResponseWrapperAds getAdsMe(UserDetails userDetails);
 
     /**
      * Поиск объявлений по названию
+     *
      * @param description название объявления
      * @return найденные объявления
      */

@@ -2,6 +2,9 @@ package pro.sky.adsonlineapp.dto;
 
 import lombok.Data;
 
+/**
+ * DTO информации об объявлении.
+ */
 @Data
 public class FullAds{
 

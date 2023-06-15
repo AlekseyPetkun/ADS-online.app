@@ -9,7 +9,9 @@ import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.service.AuthService;
 
-
+/**
+ * Бизнес-логика по работе с аутентификацией.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -17,7 +19,8 @@ public class AuthServiceImpl implements AuthService {
 
   private final PasswordEncoder encoder;
 
-  public AuthServiceImpl(UserDetailsManager manager, PasswordEncoder passwordEncoder) {
+  public AuthServiceImpl(UserDetailsManager manager,
+                         PasswordEncoder passwordEncoder) {
     this.manager = manager;
     this.encoder = passwordEncoder;
   }

@@ -1,5 +1,6 @@
 package pro.sky.adsonlineapp.service.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pro.sky.adsonlineapp.dto.CommentDto;
@@ -12,24 +13,20 @@ import pro.sky.adsonlineapp.repository.AdsRepository;
 import pro.sky.adsonlineapp.repository.CommentRepository;
 import pro.sky.adsonlineapp.service.CommentService;
 import pro.sky.adsonlineapp.service.ValidationService;
-import pro.sky.adsonlineapp.utils.MappingUtils;
+import pro.sky.adsonlineapp.utils.impl.CommentMappingUtils;
+import pro.sky.adsonlineapp.utils.impl.CreateCommentMappingUtils;
 
+/**
+ * Бизнес-логика по работе с комментариями.
+ */
 @Service
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final ValidationService validationService;
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
-    private final MappingUtils<CreateComment, Comment> createComments;
-
-    private final MappingUtils<CommentDto, Comment> comments;
-
-    public CommentServiceImpl(ValidationService validationService, CommentRepository commentRepository, AdsRepository adsRepository, MappingUtils<CreateComment, Comment> createComments, MappingUtils<CommentDto, Comment> comments) {
-        this.validationService = validationService;
-        this.commentRepository = commentRepository;
-        this.adsRepository = adsRepository;
-        this.createComments = createComments;
-        this.comments = comments;
-    }
+    private final CreateCommentMappingUtils createComments;
+    private final CommentMappingUtils comments;
 
 
     @Override
@@ -38,9 +35,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ValidationException(dto.toString());
         }
         Comment entity = createComments.mapToEntity(dto);
-        commentRepository.save(entity);
-        Comment entityOne = commentRepository.getReferenceById(entity.getCommentId().intValue());
-        return entityOne;
+        return commentRepository.save(entity);
     }
 
     @Override
@@ -56,6 +51,7 @@ public class CommentServiceImpl implements CommentService {
             return true;
         }
     }
+
     @Override
     @Transactional
     public CommentDto updateComment(Integer adId, Integer commentId) {
@@ -65,16 +61,17 @@ public class CommentServiceImpl implements CommentService {
             throw new NotFoundEntityException("отсутствует такое объявление");
         } else if (comment == null || !comment.getAd().equals(ad)) {
             throw new NotFoundEntityException("отсутствует такой комментарий");
-        }else {
+        } else {
             comment = commentRepository.updateCommentById(adId, commentId);
             CommentDto commentDto = comments.mapToDto(comment);
             return commentDto;
         }
     }
-@Override
-    public CommentDto getComments(Integer id){
 
-    Comment comment = commentRepository.getReferenceById(id);
+    @Override
+    public CommentDto getComments(Integer id) {
+
+        Comment comment = commentRepository.getReferenceById(id);
         if (comment == null) {
             throw new NotFoundEntityException("такого комментария нет");
         }
