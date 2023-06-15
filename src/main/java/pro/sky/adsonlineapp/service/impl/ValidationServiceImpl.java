@@ -2,6 +2,7 @@ package pro.sky.adsonlineapp.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CreateAds;
+import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.service.ValidationService;
 
 /**
