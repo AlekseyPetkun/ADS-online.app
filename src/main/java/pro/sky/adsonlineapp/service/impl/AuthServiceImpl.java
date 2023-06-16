@@ -9,7 +9,9 @@ import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.service.AuthService;
 
-
+/**
+ * Бизнес-логика по работе с аутентификацией.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 

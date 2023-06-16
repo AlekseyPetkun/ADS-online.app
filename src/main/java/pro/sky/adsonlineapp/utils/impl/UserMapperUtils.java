@@ -9,7 +9,7 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
  * Бизнес-логика по маппингу пользователей (UserDto).
  */
 @Service
-public class UserMapper implements MappingUtils<UserDto, User> {
+public class UserMapperUtils {
 
     public User mapToEntity(UserDto dto) {
 

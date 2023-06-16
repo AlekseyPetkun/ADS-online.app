@@ -10,11 +10,12 @@ import pro.sky.adsonlineapp.model.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
+
     /**
-     *
-     * @param pk
-     * @param commentId
-     * @return
+     * Изменить комментарий
+     * @param pk идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @return сущность комментария
      */
     @Modifying
     @Query("UPDATE Comment a SET " +

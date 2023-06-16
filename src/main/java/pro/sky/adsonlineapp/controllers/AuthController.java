@@ -16,7 +16,9 @@ import pro.sky.adsonlineapp.service.AuthService;
 
 import static pro.sky.adsonlineapp.constants.Role.USER;
 
-
+/**
+ * Контроллер по работе с авторизациями и регистрациями.
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController

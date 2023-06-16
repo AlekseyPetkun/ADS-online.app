@@ -9,9 +9,8 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
  * Бизнес-логика по маппингу объявлений (CreateAds).
  */
 @Service
-public class CreateAdsMappingUtilsImpl implements MappingUtils<CreateAds, Ad> {
+public class CreateAdsMappingUtils {
 
-    @Override
     public CreateAds mapToDto(Ad entity) {
 
         CreateAds dto = new CreateAds();
@@ -22,7 +21,6 @@ public class CreateAdsMappingUtilsImpl implements MappingUtils<CreateAds, Ad> {
         return dto;
     }
 
-    @Override
     public Ad mapToEntity(CreateAds dto) {
 
         Ad adsEntity = new Ad();
