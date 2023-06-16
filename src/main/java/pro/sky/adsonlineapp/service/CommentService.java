@@ -13,9 +13,40 @@ import java.util.Collection;
  */
 public interface CommentService {
 
+     /**
+      * Создание комментария
+      *
+      * @param id  идентификатор комментария
+      * @param dto тело создаваемого комментария в виде DTO
+      * @return созданный комментарий
+      */
      Comment saveComment(Integer id, CreateComment dto);
+
+     /**
+      * Удалить комментарий
+      *
+      * @param adId      идентификатор объявления удаляемого комментария
+      * @param commentId идентификатор удаляемого комментария
+      * @return удаленный комментарий
+      */
      boolean deleteComment(Integer adId, Integer commentId);
+
+     /**
+      * Изменить комментарий
+      *
+      * @param adId      идентификатор объявления изменяемого комментария
+      * @param commentId идентификатор изменяемого комментария
+      * @return измененный комментарий
+      */
      CommentDto updateComment(Integer adId, Integer commentId);
+
+     /**
+      * Получить комментарий
+      *
+      * @param id идентификатор комментария
+      * @return комментарий
+      */
      CommentDto getComments(Integer id);
 
 }
+

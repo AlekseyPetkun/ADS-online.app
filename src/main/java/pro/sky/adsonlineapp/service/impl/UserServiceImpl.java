@@ -1,50 +1,83 @@
 package pro.sky.adsonlineapp.service.impl;
 
+import lombok.AllArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.UserService;
-import pro.sky.adsonlineapp.utils.impl.UserMapper;
+import pro.sky.adsonlineapp.utils.impl.UserMapperUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
+import java.util.List;
 
-        /**
-        * Сервис для работы с Пользователями
-        */
-        @Service
-        public class UserServiceImpl implements UserService {
 
-            private final UserRepository userRepository;
-            private final UserMapper userMapper;
+/**
+ * Бизнес-логика по работе с пользователями.
+ */
+@Service
+@AllArgsConstructor
+public class UserServiceImpl implements UserService {
 
-            public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
-                this.userRepository = userRepository;
-                this.userMapper = userMapper;
-            }
+    private final UserRepository userRepository;
+    private final UserMapperUtils userMapper;
+    @Setter
+    private User user;
 
-            @Override
-            public boolean setPassword(String currentPassword, String newPassword) {
-                return false;
-            }
+    @Override
+    public boolean setPassword(String currentPassword, String newPassword) {
+        return false;
+    }
 
-            @Override
-            public UserDto getUser() {
+    @Override
+    public UserDto getUser() {
 
-                User user = userRepository.findById(1).orElse(null);
-                if (user != null) {
-                    return userMapper.mapToDto(user);
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public boolean updateUser(User user) {
-                return false;
-            }
-            @Override
-            public boolean updateUserImage(MultipartFile image) {
-                return false;
-            }
+        User user = userRepository.findById(1).orElse(null);
+        if (user != null) {
+            return userMapper.mapToDto(user);
+        } else {
+            return null;
         }
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        return false;
+    }
+
+    @Override
+    public boolean updateUserImage(MultipartFile image) {
+        return false;
+    }
+
+    //    @Override
+//    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("Пользователь '%s' не найден!", username));
+        }
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                mapRolesToAuthorities());
+    }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities() {
+
+//        return roles.stream()
+//                .map(r -> new SimpleGrantedAuthority(r.name()))
+//                .collect(Collectors.toList());
+
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRole().name());
+        return List.of(simpleGrantedAuthority);
+    }
+}
+

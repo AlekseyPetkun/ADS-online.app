@@ -11,12 +11,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 /**
- * Модель пользователя
+ * Сущность пользователя
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 //@Builder
@@ -40,8 +38,8 @@ public class User {
     /**
      * Логин пользователя
      */
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username")
+    private String username;
 
     /**
      * Имя пользователя

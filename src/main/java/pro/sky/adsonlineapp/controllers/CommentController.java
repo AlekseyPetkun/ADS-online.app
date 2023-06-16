@@ -99,7 +99,7 @@ public class CommentController {
     )
     @ApiResponse(
             responseCode = "403",
-            description = "отстутсвуют права доступа"
+            description = "отсутствуют права доступа"
     )
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                   @PathVariable Integer commentId,

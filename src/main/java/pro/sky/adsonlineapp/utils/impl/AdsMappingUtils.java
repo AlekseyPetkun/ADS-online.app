@@ -2,17 +2,16 @@ package pro.sky.adsonlineapp.utils.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.AdsDto;
+import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.model.User;
-import pro.sky.adsonlineapp.utils.MappingUtils;
 
 /**
  * Бизнес-логика по маппингу объявлений (Ads).
  */
 @Service
-public class AdsMappingUtilsImpl implements MappingUtils<AdsDto, Ad> {
+public class AdsMappingUtils {
 
-    @Override
     public AdsDto mapToDto(Ad entity) {
 
         AdsDto dto = new AdsDto();
@@ -25,12 +24,11 @@ public class AdsMappingUtilsImpl implements MappingUtils<AdsDto, Ad> {
         return dto;
     }
 
-    @Override
-    public Ad mapToEntity(AdsDto dto) {
+    public Ad mapToEntity(CreateAds dto, User author) {
 
-        User author = new User();
+//        User author = new User();
         Ad adsEntity = new Ad();
-        adsEntity.setPk(dto.getPk());
+        adsEntity.setDescription(dto.getDescription());
         adsEntity.setTitle(dto.getTitle());
         adsEntity.setPrice(dto.getPrice());
 //        adsEntity.setImage(dto.getImage());
