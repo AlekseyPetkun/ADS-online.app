@@ -73,7 +73,7 @@ public class AdsServiceImpl implements AdsService {
 
         adsRepository.save(entity);
 
-        Ad entity1 = adsRepository.getReferenceById(entity.getPk());
+        Ad entity1 = adsRepository.getReferenceById(entity.getId());
 
         AdsDto adsDto = adsMapping.mapToDto(entity1);
 

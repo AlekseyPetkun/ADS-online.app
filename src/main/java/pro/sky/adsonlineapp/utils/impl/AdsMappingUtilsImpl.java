@@ -16,7 +16,7 @@ public class AdsMappingUtilsImpl implements MappingUtils<AdsDto, Ad> {
     public AdsDto mapToDto(Ad entity) {
 
         AdsDto dto = new AdsDto();
-        dto.setPk(entity.getPk());
+        dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setPrice(entity.getPrice());
         dto.setImage(entity.getImage());
@@ -30,7 +30,7 @@ public class AdsMappingUtilsImpl implements MappingUtils<AdsDto, Ad> {
 
         User author = new User();
         Ad adsEntity = new Ad();
-        adsEntity.setPk(dto.getPk());
+        adsEntity.setId(dto.getId());
         adsEntity.setTitle(dto.getTitle());
         adsEntity.setPrice(dto.getPrice());
 //        adsEntity.setImage(dto.getImage());

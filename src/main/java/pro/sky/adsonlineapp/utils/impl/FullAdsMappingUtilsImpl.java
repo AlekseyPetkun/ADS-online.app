@@ -22,7 +22,7 @@ public class FullAdsMappingUtilsImpl implements MappingUtils<FullAds, Ad> {
         dto.setEmail(entity.getAuthor().getEmail());
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setAuthorLastName(entity.getAuthor().getLastName());
-        dto.setPk(entity.getPk());
+        dto.setPk(entity.getId());
         dto.setPhone(entity.getAuthor().getPhone());
 //        dto.setImage(entity.getPicture);
 

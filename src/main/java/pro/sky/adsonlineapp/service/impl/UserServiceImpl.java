@@ -44,10 +44,10 @@ import org.springframework.web.multipart.MultipartFile;
                 return false;
             }
 
-            @Override
-            public boolean updateUserPicture(MultipartFile picture) {
-                return false;
-            }
+           // @Override
+           // public boolean updateUserPicture(MultipartFile picture) {
+           //     return false;
+           // }
 
             @Override
             public boolean updateUserImage(MultipartFile image) {
