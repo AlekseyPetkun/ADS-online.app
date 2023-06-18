@@ -3,6 +3,8 @@ package pro.sky.adsonlineapp.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,17 +28,14 @@ public class WebSecurityConfig {
   };
 
   @Bean
-  public InMemoryUserDetailsManager userDetailsService() {
-    UserDetails user =
-        User.builder()
-            .username("user@gmail.com")
-            .password("password")
-            .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
-            .roles("USER")
-            .build();
-    return new InMemoryUserDetailsManager(user);
-  }
+  public DaoAuthenticationProvider daoAuthenticationProvider() {
 
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(userService);
+
+    return new DaoAuthenticationProvider();
+  }
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf()
@@ -44,10 +43,11 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(
                     (authorization) ->
                             authorization
-                                    .mvcMatchers(AUTH_WHITELIST)
-                                    .permitAll()
-                                    .mvcMatchers("/ads/**", "/users/**")
-                                    .authenticated())
+                                    .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                    .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
+//                                        .mvcMatchers(ENDPOINTS_FOR_ADMINS).hasRole("ADMIN")
+//                                        .mvcMatchers(ENDPOINTS_FOR_USERS).hasRole("USER")
+                                    .mvcMatchers("/ads/**", "/users/**").authenticated())
             .cors()
             .and()
             .httpBasic(withDefaults());

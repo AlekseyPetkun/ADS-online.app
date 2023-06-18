@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.adsonlineapp.dto.AdsDto;
@@ -18,6 +20,7 @@ import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
+import pro.sky.adsonlineapp.service.impl.UserServiceImpl;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Контроллер объявлений.
+ * Контроллер по работе с объявлениями
  */
 @Slf4j
 @RestController
@@ -40,6 +43,10 @@ import java.util.Collection;
 public class AdsController {
 
     private final AdsService adsService;
+    private final UserDetails userDetails;
+    //    private final Principal principal;
+    private final UserServiceImpl userService;
+
 
     @GetMapping
     @Operation(
@@ -87,12 +94,12 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image) throws IOException {
 
         try {
-            AdsDto adsDto = adsService.addAd(properties, image);
+            AdsDto adsDto = adsService.addAd(properties, image, userDetails);
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -151,10 +158,11 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<?> removeAd(@PathVariable Integer id) {
 
         try {
-            return ResponseEntity.ok().body(adsService.deleteAdById(id));
+            return ResponseEntity.ok().body(adsService.deleteAdById(id, userDetails));
 
         } catch (RuntimeException e) {
             e.getStackTrace();
@@ -185,11 +193,12 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                             @RequestBody CreateAds dto) {
 
         try {
-            AdsDto adsDto = adsService.updateAdsById(id, dto);
+            AdsDto adsDto = adsService.updateAdsById(id, dto, userDetails);
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -217,10 +226,11 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
 
         try {
-            ResponseWrapperAds dto = adsService.getAdsMe();
+            ResponseWrapperAds dto = adsService.getAdsMe(userDetails);
             return ResponseEntity.ok().body(dto);
 
         } catch (RuntimeException e) {
@@ -252,10 +262,42 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
                                                @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/found_ads")
+    @Operation(
+            summary = "Поиск объявлений по названию",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "OK",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ResponseWrapperAds.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Unauthorized"
+                    )
+            },
+            tags = "Объявления"
+    )
+    public ResponseEntity<ResponseWrapperAds> findByDescriptionAd(@RequestParam String description) {
+
+        try {
+            ResponseWrapperAds dto = adsService.findByDescriptionAd(description);
+            return ResponseEntity.ok().body(dto);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

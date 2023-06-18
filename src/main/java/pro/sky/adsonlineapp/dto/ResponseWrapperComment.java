@@ -6,6 +6,9 @@ import pro.sky.adsonlineapp.model.Comment;
 
 import java.util.List;
 
+/**
+ * DTO всех комментариев.
+ */
 @Data
 public class ResponseWrapperComment {
     // общее количество комментариев

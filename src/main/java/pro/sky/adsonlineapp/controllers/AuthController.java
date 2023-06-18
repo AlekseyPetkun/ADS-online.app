@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.adsonlineapp.dto.LoginReq;
+import pro.sky.adsonlineapp.dto.LoginReqDto;
 import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.service.AuthService;
@@ -16,7 +16,9 @@ import pro.sky.adsonlineapp.service.AuthService;
 
 import static pro.sky.adsonlineapp.constants.Role.USER;
 
-
+/**
+ * Контроллер по работе с авторизациями и регистрациями.
+ */
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
@@ -26,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginReq req) {
+    public ResponseEntity<?> login(@RequestBody LoginReqDto req) {
         if (authService.login(req.getUsername(), req.getPassword())) {
             return ResponseEntity.ok().build();
         } else {

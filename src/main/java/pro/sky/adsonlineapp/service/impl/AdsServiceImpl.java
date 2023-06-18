@@ -1,21 +1,30 @@
 package pro.sky.adsonlineapp.service.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
+import pro.sky.adsonlineapp.exceptions.NotFoundResponseWrapperAdsException;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.Ad;
+import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.AdsRepository;
+import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.AdsService;
 import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.MappingUtils;
+import pro.sky.adsonlineapp.utils.impl.AdsMappingUtils;
+import pro.sky.adsonlineapp.utils.impl.CreateAdsMappingUtils;
+import pro.sky.adsonlineapp.utils.impl.FullAdsMappingUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,28 +34,19 @@ import java.util.stream.Collectors;
  * Бизнес-логика по работе с объявлениями.
  */
 @Service
+@AllArgsConstructor
 public class AdsServiceImpl implements AdsService {
 
-    @Value("${path.to.pictures.folder}")
-    private String adsImage;
+    //    @Value("${path.to.pictures.folder}")
+//    private String adsImage;
 
     private final ValidationService validationService;
     private final AdsRepository adsRepository;
-    private final MappingUtils<CreateAds, Ad> createAdsMapping;
-    private final MappingUtils<AdsDto, Ad> adsMapping;
-    private final MappingUtils<FullAds, Ad> fullAdsMapping;
+    private final UserRepository userRepository;
+    private final CreateAdsMappingUtils createAdsMapping;
+    private final AdsMappingUtils adsMapping;
+    private final FullAdsMappingUtils fullAdsMapping;
 
-    public AdsServiceImpl(ValidationService validationService,
-                          AdsRepository adsRepository,
-                          MappingUtils<CreateAds, Ad> createAdsMapping,
-                          MappingUtils<AdsDto, Ad> adsMapping,
-                          MappingUtils<FullAds, Ad> fullAdsMapping) {
-        this.validationService = validationService;
-        this.adsRepository = adsRepository;
-        this.createAdsMapping = createAdsMapping;
-        this.adsMapping = adsMapping;
-        this.fullAdsMapping = fullAdsMapping;
-    }
 
     @Override
     public ResponseWrapperAds getAllAds() {
@@ -65,20 +65,22 @@ public class AdsServiceImpl implements AdsService {
 //    }
 
     @Override
-    public AdsDto addAd(CreateAds dto, MultipartFile image) {
+    public AdsDto addAd(CreateAds dto, MultipartFile image, UserDetails userDetails) {
 
         if (!validationService.validate(dto)) {
             throw new ValidationException(dto.toString());
         }
 
-        Ad entity = createAdsMapping.mapToEntity(dto);
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+        Ad entity = adsMapping.mapToEntity(dto, user);
 
         adsRepository.save(entity);
 
-        Ad entity1 = adsRepository.findById(entity.getPk())
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
-
-        AdsDto adsDto = adsMapping.mapToDto(entity1);
+        AdsDto adsDto = adsMapping.mapToDto(entity);
 
         return adsDto;
     }
@@ -87,39 +89,39 @@ public class AdsServiceImpl implements AdsService {
     public FullAds getFullAdsById(Integer id) {
 
         Ad entity = adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));;
-        if (entity == null) {
-            throw new NotFoundEntityException("Сущность отсутствует!");
-        }
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
+        ;
+
         FullAds dto = fullAdsMapping.mapToDto(entity);
         return dto;
     }
 
     @Override
-    public boolean deleteAdById(Integer id) {
+    public boolean deleteAdById(Integer id, UserDetails userDetails) {
 
         Ad entity = adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));;
-        if (entity == null) {
-            throw new NotFoundEntityException("Сущность отсутствует!");
-        } else {
+                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
+
+        if (entity.getAuthor().getUsername().equals(userDetails.getUsername())) {
             adsRepository.delete(entity);
             return true;
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @Override
     @Transactional
-    public AdsDto updateAdsById(Integer id, CreateAds dto) {
+    public AdsDto updateAdsById(Integer id, CreateAds dto, UserDetails userDetails) {
+
+        if (!validationService.validate(dto)) {
+            throw new ValidationException(dto.toString());
+        }
 
         Ad entity = adsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
 
-        if (entity == null) {
-            throw new NotFoundEntityException("Сущность отсутствует!");
-        } else if (!validationService.validate(dto)) {
-            throw new ValidationException(dto.toString());
-        } else {
+        if (entity.getAuthor().getUsername().equals(userDetails.getUsername())) {
             entity = adsRepository.updateAdsById(dto.getDescription(),
                     dto.getPrice(),
                     dto.getTitle(),
@@ -127,24 +129,37 @@ public class AdsServiceImpl implements AdsService {
 
             AdsDto adsDto = adsMapping.mapToDto(entity);
             return adsDto;
+
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe() {
+    public ResponseWrapperAds getAdsMe(UserDetails userDetails) {
 
-        List<AdsDto> dto = adsRepository.findAll().stream()
-                .map(adsMapping::mapToDto)
-                .collect(Collectors.toList());
-        return new ResponseWrapperAds(dto.size(), dto);
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        if (user != null) {
+            List<AdsDto> dto = adsRepository.findAll().stream()
+                    .map(adsMapping::mapToDto)
+                    .collect(Collectors.toList());
+            return new ResponseWrapperAds(dto.size(), dto);
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @Override
     public ResponseWrapperAds findByDescriptionAd(String description) {
 
-        List<AdsDto> dto = adsRepository.findByDescriptionContainingIgnoreCase(description).stream()
+        List<AdsDto> dto = adsRepository
+                .findByDescriptionContainingIgnoreCase(description).stream()
                 .map(adsMapping::mapToDto)
                 .collect(Collectors.toList());
-        return new ResponseWrapperAds(dto.size(), dto);
+        if (dto != null) {
+            return new ResponseWrapperAds(dto.size(), dto);
+        } else {
+            throw new NotFoundResponseWrapperAdsException("Объявления не найдены!");
+        }
     }
 }
