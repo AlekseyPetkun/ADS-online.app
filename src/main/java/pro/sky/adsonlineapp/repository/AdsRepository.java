@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.model.Ad;
+import pro.sky.adsonlineapp.model.User;
 
 import java.util.List;
 
@@ -48,4 +49,7 @@ public interface AdsRepository extends JpaRepository<Ad, Integer> {
 //            @Param("description") String description);
 
     List<Ad> findByDescriptionContainingIgnoreCase(String description);
+    List<Ad> findByAuthor(User author);
+
+
 }

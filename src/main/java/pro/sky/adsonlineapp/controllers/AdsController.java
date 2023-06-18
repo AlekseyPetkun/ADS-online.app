@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -95,10 +96,13 @@ public class AdsController {
     )
 
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
-                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
+                                        @RequestPart(name = "image") MultipartFile image,
+                                        Principal principal) throws IOException {
+
+
 
         try {
-            AdsDto adsDto = adsService.addAd(properties, image, userDetails);
+            AdsDto adsDto = adsService.addAd(properties, image, principal.getName());
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -157,10 +161,11 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<?> removeAd(@PathVariable Integer id) {
+    public ResponseEntity<?> removeAd(@PathVariable Integer id,
+                                      Principal principal) {
 
         try {
-            return ResponseEntity.ok().body(adsService.deleteAdById(id, userDetails));
+            return ResponseEntity.ok().body(adsService.deleteAdById(id, principal.getName()));
 
         } catch (RuntimeException e) {
             e.getStackTrace();
@@ -192,10 +197,11 @@ public class AdsController {
             tags = "Объявления"
     )
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
-                                            @RequestBody CreateAds dto) {
+                                            @RequestBody CreateAds dto,
+                                            Principal principal) {
 
         try {
-            AdsDto adsDto = adsService.updateAdsById(id, dto, userDetails);
+            AdsDto adsDto = adsService.updateAdsById(id, dto, principal.getName());
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -223,10 +229,10 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
+    public ResponseEntity<ResponseWrapperAds> getAdsMe(Principal principal) {
 
         try {
-            ResponseWrapperAds dto = adsService.getAdsMe(userDetails);
+            ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
             return ResponseEntity.ok().body(dto);
 
         } catch (RuntimeException e) {

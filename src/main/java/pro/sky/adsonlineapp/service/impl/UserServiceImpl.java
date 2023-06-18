@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapperUtils userMapper;
-    @Setter
-    private User user;
 
     @Override
     public boolean setPassword(String currentPassword, String newPassword) {
@@ -56,28 +54,5 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    //    @Override
-//    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("Пользователь '%s' не найден!", username));
-        }
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                mapRolesToAuthorities());
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities() {
-
-//        return roles.stream()
-//                .map(r -> new SimpleGrantedAuthority(r.name()))
-//                .collect(Collectors.toList());
-
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(user.getRole().name());
-        return List.of(simpleGrantedAuthority);
-    }
 }
 

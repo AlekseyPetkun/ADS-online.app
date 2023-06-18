@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Сущность пользователя
@@ -89,6 +90,9 @@ public class User {
     private Role role;
 
     private String image;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Ad> ads;
 
 //    @PostPersist
 //    public void logUserAdded() {
