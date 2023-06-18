@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,7 +95,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image,
                                         Principal principal) throws IOException {
@@ -161,8 +162,9 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+
     public ResponseEntity<?> removeAd(@PathVariable Integer id,
-                                      Principal principal) {
+                                      Principal principal) 
 
         try {
             return ResponseEntity.ok().body(adsService.deleteAdById(id, principal.getName()));
@@ -196,6 +198,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                             @RequestBody CreateAds dto,
                                             Principal principal) {
@@ -229,8 +232,10 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+
     public ResponseEntity<ResponseWrapperAds> getAdsMe(Principal principal) {
 
+   
         try {
             ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
             return ResponseEntity.ok().body(dto);
@@ -264,6 +269,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
                                                @RequestPart MultipartFile image) {
 
