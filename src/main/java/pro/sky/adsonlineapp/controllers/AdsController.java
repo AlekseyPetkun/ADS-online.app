@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,7 +94,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image) throws IOException {
 
@@ -157,6 +158,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<?> removeAd(@PathVariable Integer id) {
 
         try {
@@ -191,6 +193,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                             @RequestBody CreateAds dto) {
 
@@ -223,6 +226,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<ResponseWrapperAds> getAdsMe() {
 
         try {
@@ -258,6 +262,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
                                                @RequestPart MultipartFile image) {
 

@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
@@ -21,6 +23,7 @@ import pro.sky.adsonlineapp.service.CommentService;
 @RequestMapping("/ads")
 public class CommentController {
 
+    @Autowired
     private final CommentService commentService;
 
     @PostMapping("/{id}/comments")
@@ -36,6 +39,7 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы оставить комментарий необходимо авторизоваться"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
                                          @RequestBody CreateComment comments) {
         Comment comment = commentService.saveComment(id, comments);
@@ -57,6 +61,7 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<CommentDto> getComments(@PathVariable("id") Integer id) {
         CommentDto commentDto = commentService.getComments(id);
         return ResponseEntity.ok(commentDto);
@@ -79,6 +84,7 @@ public class CommentController {
             responseCode = "403",
             description = "отстутсвуют права доступа"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<Object> deleteComment(@PathVariable Integer adId,
                                                  @PathVariable Integer commentId) {
         return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId));
@@ -101,6 +107,7 @@ public class CommentController {
             responseCode = "403",
             description = "отсутствуют права доступа"
     )
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                   @PathVariable Integer commentId,
                                                   @RequestBody Comment comment) {
