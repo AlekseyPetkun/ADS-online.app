@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
@@ -26,6 +27,7 @@ import pro.sky.adsonlineapp.utils.impl.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.impl.CreateAdsMappingUtils;
 import pro.sky.adsonlineapp.utils.impl.FullAdsMappingUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -65,13 +67,13 @@ public class AdsServiceImpl implements AdsService {
 //    }
 
     @Override
-    public AdsDto addAd(CreateAds dto, MultipartFile image, UserDetails userDetails) {
+    public AdsDto addAd(CreateAds dto, MultipartFile image, String userDetails) {
 
         if (!validationService.validate(dto)) {
             throw new ValidationException(dto.toString());
         }
 
-        User user = userRepository.findByUsername(userDetails.getUsername());
+        User user = userRepository.findByUsername(userDetails);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
@@ -97,12 +99,13 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public boolean deleteAdById(Integer id, UserDetails userDetails) {
+    public boolean deleteAdById(Integer id, String userDetails) {
 
         Ad entity = adsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
 
-        if (entity.getAuthor().getUsername().equals(userDetails.getUsername())) {
+        if (entity.getAuthor().getUsername().equals(userDetails)
+                || entity.getAuthor().getRole().equals(Role.ADMIN)) {
             adsRepository.delete(entity);
             return true;
         } else {
@@ -112,7 +115,7 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     @Transactional
-    public AdsDto updateAdsById(Integer id, CreateAds dto, UserDetails userDetails) {
+    public AdsDto updateAdsById(Integer id, CreateAds dto, String userDetails) {
 
         if (!validationService.validate(dto)) {
             throw new ValidationException(dto.toString());
@@ -121,7 +124,8 @@ public class AdsServiceImpl implements AdsService {
         Ad entity = adsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
 
-        if (entity.getAuthor().getUsername().equals(userDetails.getUsername())) {
+        if (entity.getAuthor().getUsername().equals(userDetails)
+                || entity.getAuthor().getRole().equals(Role.ADMIN)) {
             entity = adsRepository.updateAdsById(dto.getDescription(),
                     dto.getPrice(),
                     dto.getTitle(),
@@ -136,13 +140,16 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public ResponseWrapperAds getAdsMe(UserDetails userDetails) {
+    public ResponseWrapperAds getAdsMe(String userDetails) {
 
-        User user = userRepository.findByUsername(userDetails.getUsername());
-        if (user != null) {
-            List<AdsDto> dto = adsRepository.findAll().stream()
-                    .map(adsMapping::mapToDto)
-                    .collect(Collectors.toList());
+        User author = userRepository.findByUsername(userDetails);
+        if (author != null) {
+            List<Ad> adEntity = adsRepository.findByAuthor(author);
+            List<AdsDto> dto = new ArrayList<>();
+
+            for (Ad ad : adEntity) {
+                dto.add(adsMapping.mapToDto(ad));
+            }
             return new ResponseWrapperAds(dto.size(), dto);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
