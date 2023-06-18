@@ -1,25 +1,34 @@
 package pro.sky.adsonlineapp.model;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Integer commentId;
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
+
     @Column(name = "text")
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
+    private Ad ad;
 }
 

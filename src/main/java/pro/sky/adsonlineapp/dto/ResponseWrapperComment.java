@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class ResponseWrapperComment {
+    // общее количество комментариев
     @JsonProperty("count")
     private Integer count;
 

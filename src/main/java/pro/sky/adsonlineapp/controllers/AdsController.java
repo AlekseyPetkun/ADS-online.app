@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,10 @@ import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -51,9 +56,16 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<Collection<ResponseWrapperAds>> getAllAds() {
+    public ResponseEntity<ResponseWrapperAds> getAllAds() {
 
-        return ResponseEntity.ok().build();
+        try {
+            ResponseWrapperAds ads = adsService.getAllAds();
+            return ResponseEntity.ok(ads);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -75,11 +87,18 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds dto,
-                                        @RequestPart(name = "image") MultipartFile image) {
 
-        AdsDto adsDto = adsService.addAd(dto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
+                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
+
+        try {
+            AdsDto adsDto = adsService.addAd(properties, image);
+            return ResponseEntity.ok().body(adsDto);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -101,9 +120,16 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<FullAds> getFullAdsById(@PathVariable Integer id) {
+    public ResponseEntity<FullAds> getAds(@PathVariable Integer id) {
 
-        return ResponseEntity.ok().build();
+        try {
+            FullAds dto = adsService.getFullAdsById(id);
+            return ResponseEntity.ok().body(dto);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -125,8 +151,15 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<?> deleteAdById(@PathVariable Integer id) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> removeAd(@PathVariable Integer id) {
+
+        try {
+            return ResponseEntity.ok().body(adsService.deleteAdById(id));
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PatchMapping("/{id}")
@@ -152,10 +185,17 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<AdsDto> updateAdById(@PathVariable Integer id,
-                                               @RequestBody CreateAds dto) {
+    public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
+                                            @RequestBody CreateAds dto) {
 
-        return ResponseEntity.ok().build();
+        try {
+            AdsDto adsDto = adsService.updateAdsById(id, dto);
+            return ResponseEntity.ok().body(adsDto);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/me")
@@ -177,9 +217,16 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<ResponseWrapperAds> getFullAdsMe() {
+    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
 
-        return ResponseEntity.ok().build();
+        try {
+            ResponseWrapperAds dto = adsService.getAdsMe();
+            return ResponseEntity.ok().body(dto);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -205,8 +252,8 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    public ResponseEntity<Picture> updateImageById(@PathVariable Integer id,
-                                                   @RequestPart MultipartFile image) {
+    public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
+                                               @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
     }

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 //@EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan({"pro.sky.adsonlineapp.repository", "pro.sky.adsonlineapp.configuration"})
+//@ComponentScan({"pro.sky.adsonlineapp.repository", "pro.sky.adsonlineapp.configuration"})
 public class AdsOnlineAppApplication {
 
     public static void main(String[] args) {

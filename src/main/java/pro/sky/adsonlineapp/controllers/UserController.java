@@ -152,8 +152,8 @@ public class UserController {
             tags = "Пользователи"
     )
     @PatchMapping(value = "/me/picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestPart(name = "picture") MultipartFile picture) {
-        if (userService.updateUserPicture(picture)) {
+    public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image) {
+        if (userService.updateUserImage(image)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

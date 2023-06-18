@@ -1,14 +1,22 @@
 package pro.sky.adsonlineapp.model;
 
-import jakarta.persistence.*;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.Collection;
 
+/**
+ * Сущность объявления.
+ */
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
+@NoArgsConstructor
 @Table(name = "ads")
 public class Ad {
 
@@ -26,17 +34,22 @@ public class Ad {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image")
+    private String image;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image")
-    private Picture image;
+//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "image")
+//    private Picture picture;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "comment")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad"
+            , cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Comment> comments;
+
+
 
 }
 
