@@ -21,15 +21,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * Сущность объявления.
  */
 @Entity
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Slf4j
-@Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "ads")
 public class Ad {
 
@@ -62,15 +56,15 @@ public class Ad {
             , cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Comment> comments;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Ad ad = (Ad) o;
-        return getId() != null && Objects.equals(getId(), ad.getId());
-    }
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+//        Ad ad = (Ad) o;
+//        return getId() != null && Objects.equals(getId(), ad.getId());
+//    }
+//    @Override
+//    public int hashCode() {
+//        return getClass().hashCode();
+//    }
 }

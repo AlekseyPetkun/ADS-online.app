@@ -18,8 +18,9 @@ import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Pictures;
+import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
+import pro.sky.adsonlineapp.service.UserService;
 import pro.sky.adsonlineapp.service.impl.UserServiceImpl;
 
 import java.io.IOException;
@@ -38,10 +39,10 @@ import java.security.Principal;
 
 public class AdsController {
 
-    private  AdsService adsService;
+    private final AdsService adsService;
     private final UserDetails userDetails;
-    //    private final Principal principal;
-    private final UserServiceImpl userService;
+//    private final Principal principal;
+//    private final UserService userService;
 
 
     @GetMapping
@@ -90,11 +91,10 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    @PreAuthorize("hasRole('USER')")
+
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image,
                                         Principal principal) throws IOException {
-
 
 
         try {
@@ -193,7 +193,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    @PreAuthorize("hasRole('USER')")
+
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                             @RequestBody CreateAds dto,
                                             Principal principal) {
@@ -230,7 +230,7 @@ public class AdsController {
 
     public ResponseEntity<ResponseWrapperAds> getAdsMe(Principal principal) {
 
-   
+
         try {
             ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
             return ResponseEntity.ok().body(dto);
@@ -264,9 +264,9 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Pictures> updateImage(@PathVariable Integer id,
-                                                @RequestPart MultipartFile image) {
+
+    public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
+                                               @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
     }

@@ -2,11 +2,13 @@ package pro.sky.adsonlineapp.components;
 
 import java.util.Collection;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,10 +22,11 @@ import pro.sky.adsonlineapp.repository.UserRepository;
  */
 @Service
 @RequiredArgsConstructor
+@Data
 public class SecurityUser implements UserDetails, UserDetailsService {
 
     private final UserRepository userRepository;
-    @Getter
+
     private User user;
 
     @Override

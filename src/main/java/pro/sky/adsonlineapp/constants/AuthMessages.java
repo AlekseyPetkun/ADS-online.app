@@ -1,4 +1,4 @@
-package pro.sky.adsonlineapp.exceptions.message;
+package pro.sky.adsonlineapp.constants;
 
 public class AuthMessages {
     public static final String USER_NOT_FOUND_MSG = "Пользователь не найден";

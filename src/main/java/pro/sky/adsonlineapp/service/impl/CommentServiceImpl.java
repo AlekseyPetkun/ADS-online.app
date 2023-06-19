@@ -13,9 +13,8 @@ import pro.sky.adsonlineapp.repository.AdsRepository;
 import pro.sky.adsonlineapp.repository.CommentRepository;
 import pro.sky.adsonlineapp.service.CommentService;
 import pro.sky.adsonlineapp.service.ValidationService;
-import pro.sky.adsonlineapp.utils.MappingUtils;
-import pro.sky.adsonlineapp.utils.impl.CommentMappingUtils;
-import pro.sky.adsonlineapp.utils.impl.CreateCommentMappingUtils;
+import pro.sky.adsonlineapp.utils.CommentMappingUtils;
+import pro.sky.adsonlineapp.utils.CreateCommentMappingUtils;
 
 /**
  * Бизнес-логика по работе с комментариями.
