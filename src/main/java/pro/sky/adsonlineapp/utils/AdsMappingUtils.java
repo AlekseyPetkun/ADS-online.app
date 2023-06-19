@@ -1,4 +1,4 @@
-package pro.sky.adsonlineapp.utils.impl;
+package pro.sky.adsonlineapp.utils;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.AdsDto;
@@ -15,7 +15,7 @@ public class AdsMappingUtils {
     public AdsDto mapToDto(Ad entity) {
 
         AdsDto dto = new AdsDto();
-        dto.setId(entity.getId());
+        dto.setPk(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setPrice(entity.getPrice());
         dto.setImage(entity.getImage());

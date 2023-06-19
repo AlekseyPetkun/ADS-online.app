@@ -9,7 +9,7 @@ import lombok.Data;
 public class UserDto {
 
     private Integer id; // id пользователя
-    private String userName; // логин пользователя
+    private String email; // логин пользователя
     private String firstName;// имя пользователя
     private String lastName;// фамилия пользователя
     private String phone; // телефон пользователя

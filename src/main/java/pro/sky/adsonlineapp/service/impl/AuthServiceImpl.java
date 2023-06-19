@@ -1,25 +1,19 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import pro.sky.adsonlineapp.components.JpaUserDetailsService;
 import pro.sky.adsonlineapp.components.SecurityUser;
 import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.constants.Role;
-import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.AuthService;
 import pro.sky.adsonlineapp.service.ValidationService;
-import pro.sky.adsonlineapp.utils.impl.UserMapperUtils;
-
-import javax.sql.DataSource;
+import pro.sky.adsonlineapp.utils.UserMapperUtils;
 
 /**
  * Бизнес-логика по работе с аутентификацией.

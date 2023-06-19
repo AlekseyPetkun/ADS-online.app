@@ -1,4 +1,4 @@
-package pro.sky.adsonlineapp.utils.impl;
+package pro.sky.adsonlineapp.utils;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CreateComment;

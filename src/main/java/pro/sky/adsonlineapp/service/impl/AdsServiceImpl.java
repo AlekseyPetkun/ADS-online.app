@@ -1,9 +1,7 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,14 +20,12 @@ import pro.sky.adsonlineapp.repository.AdsRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.AdsService;
 import pro.sky.adsonlineapp.service.ValidationService;
-import pro.sky.adsonlineapp.utils.MappingUtils;
-import pro.sky.adsonlineapp.utils.impl.AdsMappingUtils;
-import pro.sky.adsonlineapp.utils.impl.CreateAdsMappingUtils;
-import pro.sky.adsonlineapp.utils.impl.FullAdsMappingUtils;
+import pro.sky.adsonlineapp.utils.AdsMappingUtils;
+import pro.sky.adsonlineapp.utils.CreateAdsMappingUtils;
+import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -109,7 +105,7 @@ public class AdsServiceImpl implements AdsService {
             adsRepository.delete(entity);
             return true;
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -135,7 +131,7 @@ public class AdsServiceImpl implements AdsService {
             return adsDto;
 
         } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -163,11 +159,10 @@ public class AdsServiceImpl implements AdsService {
                 .findByDescriptionContainingIgnoreCase(description).stream()
                 .map(adsMapping::mapToDto)
                 .collect(Collectors.toList());
-        if (dto != null) {
-            return new ResponseWrapperAds(dto.size(), dto);
-        } else {
-            throw new NotFoundResponseWrapperAdsException("Объявления не найдены!");
-        }
+
+        return new ResponseWrapperAds(dto.size(), dto);
+
+
     }
 
     @Override
