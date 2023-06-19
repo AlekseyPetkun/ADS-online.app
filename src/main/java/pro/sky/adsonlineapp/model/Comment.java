@@ -33,5 +33,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
+
+
 }
 

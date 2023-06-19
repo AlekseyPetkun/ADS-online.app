@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean setPassword(String currentPassword, String newPassword) {
-        return false;
+        userRepository.updatePassword(currentPassword, newPassword);
+        return true;
     }
 
     @Override
