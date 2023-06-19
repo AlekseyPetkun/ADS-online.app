@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.utils.impl;
 
 import org.springframework.stereotype.Service;
+import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.utils.MappingUtils;
@@ -11,6 +12,16 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
 @Service
 public class UserMapperUtils {
 
+    public User mapToUserEntity(RegisterReq dto){
+        User entity = new User();
+        entity.setUsername(dto.getUsername());
+        entity.setPassword(dto.getPassword());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setPhone(dto.getPhone());
+        entity.setRole(dto.getRole());
+        return entity;
+    }
     public User mapToEntity(UserDto dto) {
 
         User entity = new User();

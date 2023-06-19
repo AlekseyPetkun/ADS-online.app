@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 /**
  * Сущность пользователя
@@ -75,9 +76,9 @@ public class User {
     /**
      * Фото пользователя
      */
-  //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-  //  @OneToOne(mappedBy = "user")
-   // private Pictures pictures;
+    //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    //  @OneToOne(mappedBy = "user")
+    // private Pictures pictures;
 
 
     /**
@@ -89,6 +90,9 @@ public class User {
     private Role role;
 
     private String image;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Ad> ads;
 
 //    @PostPersist
 //    public void logUserAdded() {

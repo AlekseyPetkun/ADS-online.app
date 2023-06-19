@@ -32,7 +32,7 @@ public interface AdsService {
      * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto addAd(CreateAds dto, MultipartFile image, UserDetails userDetails);
+    AdsDto addAd(CreateAds dto, MultipartFile image, String userDetails);
 
     /**
      * Получить информацию об объявлении по id
@@ -49,7 +49,7 @@ public interface AdsService {
      * @param userDetails информация о пользователе
      * @return true or false
      */
-    boolean deleteAdById(Integer id, UserDetails userDetails);
+    boolean deleteAdById(Integer id, String userDetails);
 
     /**
      * Обновить информацию об объявлении по id
@@ -59,7 +59,7 @@ public interface AdsService {
      * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto updateAdsById(Integer id, CreateAds dto, UserDetails userDetails);
+    AdsDto updateAdsById(Integer id, CreateAds dto, String userDetails);
 
     /**
      * Получить объявления авторизованного пользователя
@@ -67,7 +67,7 @@ public interface AdsService {
      * @param userDetails информация о пользователе
      * @return объявления пользователя
      */
-    ResponseWrapperAds getAdsMe(UserDetails userDetails);
+    ResponseWrapperAds getAdsMe(String userDetails);
 
     /**
      * Поиск объявлений по названию
@@ -76,4 +76,6 @@ public interface AdsService {
      * @return найденные объявления
      */
     ResponseWrapperAds findByDescriptionAd(String description);
+
+    AdsDto addAd(CreateAds dto);
 }

@@ -18,16 +18,12 @@ import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Picture;
+import pro.sky.adsonlineapp.model.Pictures;
 import pro.sky.adsonlineapp.service.AdsService;
 import pro.sky.adsonlineapp.service.impl.UserServiceImpl;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.security.Principal;
 
 /**
  * Контроллер по работе с объявлениями
@@ -42,7 +38,7 @@ import java.util.Collection;
 
 public class AdsController {
 
-    private final AdsService adsService;
+    private  AdsService adsService;
     private final UserDetails userDetails;
     //    private final Principal principal;
     private final UserServiceImpl userService;
@@ -96,10 +92,13 @@ public class AdsController {
     )
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
-                                        @RequestPart(name = "image") MultipartFile image) throws IOException {
+                                        @RequestPart(name = "image") MultipartFile image,
+                                        Principal principal) throws IOException {
+
+
 
         try {
-            AdsDto adsDto = adsService.addAd(properties, image, userDetails);
+            AdsDto adsDto = adsService.addAd(properties, image, principal.getName());
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -158,11 +157,12 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
-    public ResponseEntity<?> removeAd(@PathVariable Integer id) {
+
+    public ResponseEntity<?> removeAd(@PathVariable Integer id,
+                                      Principal principal) {
 
         try {
-            return ResponseEntity.ok().body(adsService.deleteAdById(id, userDetails));
+            return ResponseEntity.ok().body(adsService.deleteAdById(id, principal.getName()));
 
         } catch (RuntimeException e) {
             e.getStackTrace();
@@ -195,10 +195,11 @@ public class AdsController {
     )
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
-                                            @RequestBody CreateAds dto) {
+                                            @RequestBody CreateAds dto,
+                                            Principal principal) {
 
         try {
-            AdsDto adsDto = adsService.updateAdsById(id, dto, userDetails);
+            AdsDto adsDto = adsService.updateAdsById(id, dto, principal.getName());
             return ResponseEntity.ok().body(adsDto);
 
         } catch (RuntimeException e) {
@@ -226,11 +227,12 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
-    public ResponseEntity<ResponseWrapperAds> getAdsMe() {
 
+    public ResponseEntity<ResponseWrapperAds> getAdsMe(Principal principal) {
+
+   
         try {
-            ResponseWrapperAds dto = adsService.getAdsMe(userDetails);
+            ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
             return ResponseEntity.ok().body(dto);
 
         } catch (RuntimeException e) {
@@ -263,8 +265,8 @@ public class AdsController {
             tags = "Объявления"
     )
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
-                                               @RequestPart MultipartFile image) {
+    public ResponseEntity<Pictures> updateImage(@PathVariable Integer id,
+                                                @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
     }

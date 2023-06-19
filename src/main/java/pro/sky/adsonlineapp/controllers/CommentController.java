@@ -2,6 +2,7 @@ package pro.sky.adsonlineapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import pro.sky.adsonlineapp.service.CommentService;
 @RequiredArgsConstructor
 @RequestMapping("/ads")
 public class CommentController {
+
 
     @Autowired
     private final CommentService commentService;

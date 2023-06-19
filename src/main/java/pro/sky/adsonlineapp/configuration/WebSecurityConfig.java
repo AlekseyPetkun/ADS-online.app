@@ -1,5 +1,7 @@
 package pro.sky.adsonlineapp.configuration;
 
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,51 +13,86 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import pro.sky.adsonlineapp.components.SecurityUser;
+
+import javax.sql.DataSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@AllArgsConstructor
 public class WebSecurityConfig {
 
-  private static final String[] AUTH_WHITELIST = {
-    "/swagger-resources/**",
-    "/swagger-ui.html",
-    "/v3/api-docs",
-    "/webjars/**",
-    "/login",
-    "/register"
-  };
+    private final SecurityUser securityUser;
 
-  @Bean
-  public DaoAuthenticationProvider daoAuthenticationProvider() {
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v3/api-docs",
+            "/webjars/**",
+            "/login",
+            "/register"
+    };
 
-    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(userService);
+//    @Bean
+//    public JdbcUserDetailsManager users(DataSource dataSource) {
+//
+//        UserDetails admin =
+//                User.builder()
+//                        .username("user@gmail.com")
+//                        .password("password")
+//                        .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
+//                        .roles("ADMIN")
+//                        .build();
+//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+////        if (jdbcUserDetailsManager.userExists(admin.getUsername())) {
+////            jdbcUserDetailsManager.deleteUser(admin.getUsername());
+////        }
+////        jdbcUserDetailsManager.createUser(admin);
+//        return jdbcUserDetailsManager;
+//    }
 
-    return new DaoAuthenticationProvider();
-  }
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf()
-            .disable()
-            .authorizeHttpRequests(
-                    (authorization) ->
-                            authorization
-                                    .mvcMatchers(AUTH_WHITELIST).permitAll()
-                                    .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider() {
+//
+//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//        daoAuthenticationProvider.setUserDetailsService(securityUser);
+//
+//        return daoAuthenticationProvider;
+//    }
+
+//    @Bean
+//    public JdbcUserDetailsManager users(DataSource dataSource) {
+//
+//
+//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+//
+//        return jdbcUserDetailsManager;
+//    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable()
+                .authorizeHttpRequests(
+                        (authorization) ->
+                                authorization
+                                        .mvcMatchers(AUTH_WHITELIST).permitAll()
+                                        .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
 //                                        .mvcMatchers(ENDPOINTS_FOR_ADMINS).hasRole("ADMIN")
 //                                        .mvcMatchers(ENDPOINTS_FOR_USERS).hasRole("USER")
-                                    .mvcMatchers("/ads/**", "/users/**").authenticated())
-            .cors()
-            .and()
-            .httpBasic(withDefaults());
-    return http.build();
-  }
+                                        .mvcMatchers("/ads/**", "/users/**").authenticated())
+                .cors()
+                .and()
+                .httpBasic(withDefaults());
+        return http.build();
+    }
 
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

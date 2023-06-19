@@ -15,7 +15,7 @@ public class AdsMappingUtils {
     public AdsDto mapToDto(Ad entity) {
 
         AdsDto dto = new AdsDto();
-        dto.setPk(entity.getPk());
+        dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setPrice(entity.getPrice());
         dto.setImage(entity.getImage());
