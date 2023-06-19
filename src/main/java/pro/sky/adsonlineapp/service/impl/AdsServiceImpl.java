@@ -169,4 +169,9 @@ public class AdsServiceImpl implements AdsService {
             throw new NotFoundResponseWrapperAdsException("Объявления не найдены!");
         }
     }
+
+    @Override
+    public AdsDto addAd(CreateAds dto) {
+        return null;
+    }
 }

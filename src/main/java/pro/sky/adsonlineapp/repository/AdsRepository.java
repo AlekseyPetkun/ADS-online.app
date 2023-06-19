@@ -26,11 +26,11 @@ public interface AdsRepository extends JpaRepository<Ad, Integer> {
      * @return измененная сущность объявления
      */
     @Modifying
-    @Query("UPDATE Ad a SET " +
-            "a.description = :description, " +
-            "a.price = :price," +
-            "a.title = :title" +
-            " WHERE a.pk = :id")
+    @Query(value = "UPDATE ads SET " +
+            "description = :description, " +
+            "price = :price," +
+            "title = :title" +
+            " WHERE id = :id", nativeQuery=true)
     Ad updateAdsById(
             @Param("description") String description,
             @Param("price") Integer price,

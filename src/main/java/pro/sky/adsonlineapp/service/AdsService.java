@@ -76,4 +76,6 @@ public interface AdsService {
      * @return найденные объявления
      */
     ResponseWrapperAds findByDescriptionAd(String description);
+
+    AdsDto addAd(CreateAds dto);
 }

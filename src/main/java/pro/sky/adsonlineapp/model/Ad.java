@@ -74,4 +74,3 @@ public class Ad {
         return getClass().hashCode();
     }
 }
-

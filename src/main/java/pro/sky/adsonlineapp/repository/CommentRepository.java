@@ -18,9 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
      * @return сущность комментария
      */
     @Modifying
-    @Query("UPDATE Comment a SET " +
-            "a.text = :text" +
-            " WHERE a.commentId = :commentId and a.ad.pk = :adId")
+    @Query(value = "UPDATE comments SET text = :text WHERE comment_id = :commentId and ad_id = :adId", nativeQuery=true)
     Comment updateCommentById(
             @Param("adId") Integer pk,
             @Param("commentId") Integer commentId);

@@ -54,5 +54,10 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
+  //  @Override
+  //  public boolean updateUserPicture(MultipartFile image) {
+       // return false;
+   // }
+
 }
 

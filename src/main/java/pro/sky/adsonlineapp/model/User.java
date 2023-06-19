@@ -76,9 +76,9 @@ public class User {
     /**
      * Фото пользователя
      */
-  //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-  //  @OneToOne(mappedBy = "user")
-   // private Pictures pictures;
+    //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    //  @OneToOne(mappedBy = "user")
+    // private Pictures pictures;
 
 
     /**

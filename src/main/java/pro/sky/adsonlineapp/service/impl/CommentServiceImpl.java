@@ -29,7 +29,6 @@ public class CommentServiceImpl implements CommentService {
     private final CreateCommentMappingUtils createComments;
     private final CommentMappingUtils comments;
 
-
     @Override
     public Comment saveComment(Integer id, CreateComment dto) {
         if (!validationService.validate(dto)) {

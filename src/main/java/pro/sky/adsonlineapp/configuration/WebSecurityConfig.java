@@ -25,7 +25,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-//    private final SecurityUser securityUser;
+    private final SecurityUser securityUser;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
