@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.adsonlineapp.dto.AdsDto;
@@ -20,8 +18,6 @@ import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
-import pro.sky.adsonlineapp.service.UserService;
-import pro.sky.adsonlineapp.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -40,7 +36,7 @@ import java.security.Principal;
 public class AdsController {
 
     private final AdsService adsService;
-    private final UserDetails userDetails;
+//    private final UserDetails userDetails;
 //    private final Principal principal;
 //    private final UserService userService;
 
@@ -195,12 +191,12 @@ public class AdsController {
     )
 
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
-                                            @RequestBody CreateAds dto,
+                                            @RequestBody CreateAds ads,
                                             Principal principal) {
 
         try {
-            AdsDto adsDto = adsService.updateAdsById(id, dto, principal.getName());
-            return ResponseEntity.ok().body(adsDto);
+            AdsDto adsDto = adsService.updateAdsById(id, ads, principal.getName());
+            return ResponseEntity.ok(adsDto);
 
         } catch (RuntimeException e) {
             e.getStackTrace();
@@ -233,7 +229,7 @@ public class AdsController {
 
         try {
             ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.ok(dto);
 
         } catch (RuntimeException e) {
             e.getStackTrace();

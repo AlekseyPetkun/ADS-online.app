@@ -16,5 +16,5 @@ public class ResponseWrapperComment {
     private Integer count;
 
     @JsonProperty("results")
-    private List<Comment> comments;
+    private List<Comment> results;
 }
