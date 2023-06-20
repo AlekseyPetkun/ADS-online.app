@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.constants.Role;
+import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
+import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.Ad;
@@ -20,6 +22,9 @@ import pro.sky.adsonlineapp.service.CommentService;
 import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.CommentMappingUtils;
 import pro.sky.adsonlineapp.utils.CreateCommentMappingUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
 
@@ -99,14 +104,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto getComments(Integer id) {
+    public ResponseWrapperComment getComments(Integer id, String username) {
 
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        List<Comment> commentsEntity = commentRepository.findByAdId(id);
+        List<CommentDto> dto = new ArrayList<>();
 
-        Comment comment = commentRepository.findByAuthor_Id(user.getId());
+        for (Comment comment : commentsEntity) {
+            dto.add(comments.mapToDto(comment));
+        }
 
-        CommentDto commentDto = comments.mapToDto(comment);
-        return commentDto;
+        return new ResponseWrapperComment(dto.size(), dto);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
+import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.service.CommentService;
 
@@ -66,8 +67,10 @@ public class CommentController {
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
 
-    public ResponseEntity<CommentDto> getComments(@PathVariable("id") Integer id) {
-        CommentDto commentDto = commentService.getComments(id);
+    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id,
+                                                              Principal principal) {
+
+        ResponseWrapperComment commentDto = commentService.getComments(id, principal.getName());
         return ResponseEntity.ok(commentDto);
     }
 
