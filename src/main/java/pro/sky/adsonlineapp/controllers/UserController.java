@@ -1,4 +1,5 @@
 package pro.sky.adsonlineapp.controllers;
+
 import io.swagger.v3.oas.annotations.Operation;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import pro.sky.adsonlineapp.service.UserService;
 import pro.sky.adsonlineapp.dto.NewPassword;
 
 
-
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 ;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.security.Principal;
 
 /**
  * Контроллер для работы с пользователями
@@ -57,8 +59,10 @@ public class UserController {
             tags = "Пользователи"
     )
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword password) {
-        if (userService.setPassword(password.getCurrentPassword(), password.getNewPassword())) {
+    public ResponseEntity<?> setPassword(@RequestBody NewPassword password,
+                                         Principal principal) {
+
+        if (userService.setPassword(password, principal.getName())) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -92,10 +96,11 @@ public class UserController {
             tags = "Пользователи"
     )
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        UserDto user = userService.getUser();
+    public ResponseEntity<UserDto> getUser(Principal principal) {
+
+        UserDto user = userService.getUser(principal.getName());
         if (user != null) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -132,10 +137,14 @@ public class UserController {
             tags = "Пользователи"
     )
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-        if (userService.updateUser(user)) {
-            return ResponseEntity.ok().build();
-        } else {
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto dto,
+                                              Principal principal) {
+
+        try {
+            UserDto userDto = userService.updateUser(dto, principal.getName());
+            return ResponseEntity.ok(userDto);
+        } catch (RuntimeException e) {
+            e.getStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }

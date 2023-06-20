@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
+
 /**
  * Бизнес-логика по работе с объявлениями.
  */
@@ -78,7 +80,7 @@ public class AdsServiceImpl implements AdsService {
     public FullAds getFullAdsById(Integer id) {
 
         Ad entity = adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         FullAds dto = fullAdsMapping.mapToDto(entity);
 
@@ -89,7 +91,7 @@ public class AdsServiceImpl implements AdsService {
     public boolean deleteAdById(Integer id, String userDetails) {
 
         Ad entity = adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
                 || entity.getAuthor().getRole().equals(Role.ADMIN)) {
@@ -110,7 +112,7 @@ public class AdsServiceImpl implements AdsService {
         }
 
         Ad entity = adsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundEntityException("Сущность не найдена!"));
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
                 || entity.getAuthor().getRole().equals(Role.ADMIN)) {

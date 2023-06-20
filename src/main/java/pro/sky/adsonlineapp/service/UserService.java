@@ -1,6 +1,7 @@
 package pro.sky.adsonlineapp.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import pro.sky.adsonlineapp.dto.NewPassword;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
 
@@ -16,14 +17,14 @@ public interface UserService {
      * @param newPassword     новый пароль
      * @return обновленный пароль
      */
-    boolean setPassword(String currentPassword, String newPassword);
+    boolean setPassword(NewPassword password, String username);
 
     /**
      * Получить информацию об авторизованном пользователе
      *
      * @return информация о пользователе
      */
-    UserDto getUser();
+    UserDto getUser(String username);
 
     /**
      * Обновить информацию об авторизованном пользователе
@@ -31,7 +32,7 @@ public interface UserService {
      * @param user пользователь
      * @return true or false
      */
-    boolean updateUser(User user);
+    UserDto updateUser(UserDto user, String username);
 
     /**
      * Обновить аватар авторизованного пользователя

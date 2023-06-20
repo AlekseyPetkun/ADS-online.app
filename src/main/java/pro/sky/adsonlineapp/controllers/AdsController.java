@@ -95,7 +95,7 @@ public class AdsController {
 
         try {
             AdsDto adsDto = adsService.addAd(properties, image, principal.getName());
-            return ResponseEntity.ok().body(adsDto);
+            return ResponseEntity.ok(adsDto);
 
         } catch (RuntimeException e) {
             e.getStackTrace();
