@@ -43,10 +43,11 @@ public class CommentController {
             description = "для того чтобы оставить комментарий необходимо авторизоваться"
     )
 
-    public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
-                                              @RequestBody CreateComment comments,
-                                              Principal principal) {
-        Comment comment = commentService.saveComment(id, comments,  principal.getName());
+    public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id,
+                                                 @RequestBody CreateComment comments,
+                                                 Principal principal) {
+
+        CommentDto comment = commentService.saveComment(id, comments, principal.getName());
         return ResponseEntity.ok(comment);
     }
 
@@ -85,12 +86,12 @@ public class CommentController {
     )
     @ApiResponse(
             responseCode = "403",
-            description = "отстутсвуют права доступа"
+            description = "отсутствуют права доступа"
     )
 
-    public ResponseEntity<Object> deleteComment(@PathVariable Integer adId,
-                                                @PathVariable Integer commentId,
-                                                Principal principal) {
+    public ResponseEntity<?> deleteComment(@PathVariable Integer adId,
+                                           @PathVariable Integer commentId,
+                                           Principal principal) {
         try {
             return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId,
                     principal.getName()));
@@ -120,14 +121,14 @@ public class CommentController {
 
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody Comment comment,
+                                                    @RequestBody CommentDto comment,
                                                     Principal principal) {
         try {
-            CommentDto commentDto = commentService.updateComment(adId, commentId, principal.getName());
+            CommentDto commentDto = commentService.updateComment(adId, commentId, comment, principal.getName());
             return ResponseEntity.ok().body(commentDto);
         } catch (RuntimeException e) {
             e.getStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
-}
 }

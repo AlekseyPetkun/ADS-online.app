@@ -17,6 +17,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "comment_id")
     private Integer commentId;
 
     @ManyToOne
@@ -30,6 +31,7 @@ public class Comment {
     @JoinColumn(name = "ad_id")
     private Ad ad;
 
-
+    @Column(name = "create_at")
+    private long createdAt;
 }
 
