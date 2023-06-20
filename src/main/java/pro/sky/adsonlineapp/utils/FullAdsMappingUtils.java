@@ -26,18 +26,4 @@ public class FullAdsMappingUtils {
 
         return dto;
     }
-
-    public Ad mapToEntity(FullAds dto) { // не нужная реализация
-
-//        User author = new User(dto.getAuthorFirstName(), dto.getAuthorLastName(), dto.getEmail(), dto.getPhone());
-//        Ad adsEntity = new Ad();
-//        adsEntity.setDescription(dto.getDescription());
-//        adsEntity.setPk(dto.getPk());
-//        adsEntity.setPrice(dto.getPrice());
-//        adsEntity.setTitle(dto.getTitle());
-//        adsEntity.setAuthor(author);
-//        adsEntity.setImage(dto.getImage());
-
-        return null;
-    }
 }

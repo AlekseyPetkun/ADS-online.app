@@ -1,10 +1,7 @@
 package pro.sky.adsonlineapp.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,9 +9,8 @@ import javax.persistence.*;
  * Сущность комментария
  */
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "comments")
 public class Comment {

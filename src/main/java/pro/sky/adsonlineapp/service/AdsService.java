@@ -1,16 +1,10 @@
 package pro.sky.adsonlineapp.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Ad;
-
-import java.util.List;
 
 /**
  * Сервис по работе с объявлениями.
@@ -76,6 +70,4 @@ public interface AdsService {
      * @return найденные объявления
      */
     ResponseWrapperAds findByDescriptionAd(String description);
-
-    AdsDto addAd(CreateAds dto);
 }

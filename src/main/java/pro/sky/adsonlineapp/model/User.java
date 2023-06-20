@@ -16,15 +16,10 @@ import java.util.Collection;
 /**
  * Сущность пользователя
  */
-@NoArgsConstructor
-@AllArgsConstructor
-//@Builder
-@Getter
-@Setter
 @Entity
-@Slf4j
-@Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -58,7 +53,6 @@ public class User {
      * mail пользователя
      */
     @Column(name = "email", nullable = false, unique = true)
-//    @NaturalId
     private String email;
 
     /**
@@ -86,7 +80,6 @@ public class User {
      */
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
-//    @Builder.Default
     private Role role;
 
     private String image;

@@ -20,5 +20,5 @@ public class ResponseWrapperAds {
     private Integer count;
 
     @JsonProperty("results")
-    private List<AdsDto> ads;
+    private List<AdsDto> results;
 }
