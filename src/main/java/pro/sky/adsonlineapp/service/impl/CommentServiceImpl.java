@@ -37,7 +37,8 @@ public class CommentServiceImpl implements CommentService {
     private final UserRepository userRepository;
 
     @Override
-    public Comment saveComment(Integer id, CreateComment dto, String userDetails) {
+    public CommentDto saveComment(Integer id, CreateComment dto, String userDetails) {
+
         if (!validationService.validate(dto)) {
             throw new ValidationException(dto.toString());
         }
@@ -45,24 +46,32 @@ public class CommentServiceImpl implements CommentService {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        Comment entity = createComments.mapToEntity(dto);
-        return commentRepository.save(entity);
+        Ad ad = adsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
+        Comment entity = createComments.mapToEntity(dto, user, ad);
+        commentRepository.save(entity);
+        return comments.mapToDto(entity);
     }
 
     @Override
-    public CommentDto updateComment(Integer adId, Integer commentId, String userDetails) {
-        Ad ad = adsRepository.findById(adId)
-                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+    public CommentDto updateComment(Integer adId, Integer commentId, CommentDto dto, String userDetails) {
+
+//        Ad ad = adsRepository.findById(adId)
+//                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
         if (comment.getAuthor().getUsername().equals(userDetails)
                 || comment.getAuthor().getRole().equals(Role.ADMIN)
-                && ad.getAuthor().getUsername().equals(userDetails)
-                || ad.getAuthor().getRole().equals(Role.ADMIN) ) {
-        commentRepository.updateCommentById(adId, commentId);
+                /*&& ad.getAuthor().getUsername().equals(userDetails)
+                || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
+
+            commentRepository.updateCommentById(dto.getText(), commentId);
             CommentDto commentDto = comments.mapToDto(comment);
             return commentDto;
-        }else {
+        } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
@@ -70,14 +79,18 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public boolean deleteComment(Integer adId, Integer commentId, String userDetails) {
-        Ad ad = adsRepository.findById(adId)
-                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
+//        Ad ad = adsRepository.findById(adId)
+//                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
         if (comment.getAuthor().getUsername().equals(userDetails)
                 || comment.getAuthor().getRole().equals(Role.ADMIN)
-                && ad.getAuthor().getUsername().equals(userDetails)
-                || ad.getAuthor().getRole().equals(Role.ADMIN) ) {
+                /*&& ad.getAuthor().getUsername().equals(userDetails)
+                || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
+
             commentRepository.delete(comment);
             return true;
         } else {
@@ -88,10 +101,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto getComments(Integer id) {
 
-        Comment comment = commentRepository.getReferenceById(id);
-        if (comment == null) {
-            throw new NotFoundEntityException("такого комментария нет");
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
+        Comment comment = commentRepository.findByAuthor_Id(user.getId());
+
         CommentDto commentDto = comments.mapToDto(comment);
         return commentDto;
     }

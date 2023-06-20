@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.utils.MappingUtils;
+
+import java.time.LocalDate;
+
 /**
  * Бизнес-логика по маппингу комментариев (Comment).
  */
@@ -11,10 +14,15 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
 public class CommentMappingUtils {
 
     public CommentDto mapToDto(Comment entity) {
+
         CommentDto dto = new CommentDto();
         dto.setAuthor(entity.getAuthor().getId());
+        dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setPk(entity.getCommentId());
+        dto.setAuthorImage(entity.getAuthor().getImage());
+        dto.setCreatedAt((int) entity.getCreatedAt());
         dto.setText(entity.getText());
+
         return dto;
     }
 

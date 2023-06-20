@@ -2,6 +2,7 @@ package pro.sky.adsonlineapp.service.impl;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CreateAds;
+import pro.sky.adsonlineapp.dto.CreateComment;
 import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.service.ValidationService;
@@ -26,7 +27,11 @@ public class ValidationServiceImpl implements ValidationService {
                     && ((RegisterReq) object).getFirstName() != null
                     && ((RegisterReq) object).getLastName() != null
                     && ((RegisterReq) object).getPhone() != null;
+
+        }else if (object instanceof CreateComment) {
+            return ((CreateComment) object).getText() != null;
         }
+
         return false;
     }
 }

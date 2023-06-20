@@ -12,17 +12,20 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
+
     /**
      * Изменить комментарий
      * @param pk идентификатор объявления
      * @param commentId идентификатор комментария
      * @return сущность комментария
      */
-
     @Modifying
-    @Query(value = "UPDATE comments SET text = :text WHERE comment_id = :commentId and ad_id = :adId", nativeQuery=true)
+    @Query("UPDATE Comment c SET " +
+            "c.text = :text WHERE c.commentId = :comment_id")
     Comment updateCommentById(
-            @Param("adId") Integer pk,
-            @Param("commentId") Integer commentId);
+            @Param("text") String text,
+            @Param("comment_id") Integer commentId);
+
+    Comment findByAuthor_Id(Integer id);
 }
 
