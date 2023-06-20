@@ -25,5 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Comment updateCommentById(
             @Param("text") String text,
             @Param("comment_id") Integer commentId);
+
+    Comment findByAuthor_Id(Integer id);
 }
 

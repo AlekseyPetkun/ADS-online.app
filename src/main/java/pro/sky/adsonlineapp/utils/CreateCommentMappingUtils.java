@@ -13,11 +13,11 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
 @Service
 public class CreateCommentMappingUtils {
 
-    public CreateComment mapToDto(Comment entity) {
-        CreateComment dto = new CreateComment();
-        dto.setText(entity.getText());
-        return dto;
-    }
+//    public CreateComment mapToDto(Comment entity) {
+//        CreateComment dto = new CreateComment();
+//        dto.setText(entity.getText());
+//        return dto;
+//    }
 
     public Comment mapToEntity(CreateComment dto, User author, Ad ad) {
 

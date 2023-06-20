@@ -101,8 +101,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto getComments(Integer id) {
 
-        Comment comment = commentRepository.findById(id).
-                orElseThrow(() -> new NotFoundEntityException("такого комментария нет"));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
+        Comment comment = commentRepository.findByAuthor_Id(user.getId());
 
         CommentDto commentDto = comments.mapToDto(comment);
         return commentDto;
