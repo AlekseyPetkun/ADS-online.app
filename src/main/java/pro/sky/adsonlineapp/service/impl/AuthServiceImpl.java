@@ -1,9 +1,12 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.components.JpaUserDetailsService;
 import pro.sky.adsonlineapp.components.SecurityUser;
 import pro.sky.adsonlineapp.dto.RegisterReq;
@@ -30,6 +33,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final SecurityUser securityUser;
+    //    private final JpaUserDetailsService jpaUserDetailsService;
+    private final UserDetailsService userDetailsService;
 
 
     @Override
@@ -41,16 +46,24 @@ public class AuthServiceImpl implements AuthService {
 //        if (!manager.userExists(userName)) {
 //            return false;
 //        }
-        UserDetails userDetails = securityUser.loadUserByUsername(userName);
+        User user = userRepository.findByUsername(userName);
+        if (user == null
+                || !user.getUsername().equals(userName)
+                && !user.getPassword().equals(encoder.encode(password))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
         return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
     public boolean register(RegisterReq registerReq, Role role) {
 
-//        if (manager.userExists(registerReq.getUsername())) {
-//            return false;
-//        }
+        User user = userRepository.findByUsername(registerReq.getUsername());
+        if (user != null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         if (!validationService.validate(registerReq)) {
             throw new ValidationException(registerReq.toString());

@@ -20,9 +20,27 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
 
     @Modifying
-    @Query(value = "UPDATE users SET password = :newPassword WHERE password = :currentPassword", nativeQuery=true)
+    @Query("UPDATE User u SET " +
+            "u.password = :newPassword " +
+            "WHERE u.id = :id")
     User updatePassword(
-            @Param("currentPassword") String currentPassword,
+            @Param("id") Integer id,
             @Param("newPassword") String newPassword);
+
+    @Modifying
+    @Query("UPDATE User u SET " +
+            "u.firstName = :first_name, " +
+            "u.lastName = :last_name," +
+            "u.phone = :phone," +
+            "u.email = :email," +
+            "u.image = :image" +
+            " WHERE u.id = :id")
+    User updateUser(
+            @Param("first_name") String firstName,
+            @Param("last_name") String lastName,
+            @Param("phone") String phone,
+            @Param("email") String email,
+            @Param("image") String image,
+            @Param("id") Integer id);
 
 }

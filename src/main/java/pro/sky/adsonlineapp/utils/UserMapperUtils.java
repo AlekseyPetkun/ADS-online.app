@@ -13,6 +13,7 @@ import pro.sky.adsonlineapp.utils.MappingUtils;
 public class UserMapperUtils {
 
     public User mapToUserEntity(RegisterReq dto){
+
         User entity = new User();
         entity.setUsername(dto.getUsername());
         entity.setPassword(dto.getPassword());
@@ -20,6 +21,7 @@ public class UserMapperUtils {
         entity.setLastName(dto.getLastName());
         entity.setPhone(dto.getPhone());
         entity.setRole(dto.getRole());
+
         return entity;
     }
     public User mapToEntity(UserDto dto) {
@@ -40,8 +42,7 @@ public class UserMapperUtils {
 
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
-
-        //dto.setUserName(entity.getUserName());
+        dto.setEmail(entity.getEmail());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
