@@ -20,7 +20,7 @@ public interface CommentService {
       * @param dto тело создаваемого комментария в виде DTO
       * @return созданный комментарий
       */
-     Comment saveComment(Integer id, CreateComment dto);
+     Comment saveComment(Integer id, CreateComment dto, String userDetails);
 
      /**
       * Удалить комментарий
@@ -29,7 +29,7 @@ public interface CommentService {
       * @param commentId идентификатор удаляемого комментария
       * @return удаленный комментарий
       */
-     boolean deleteComment(Integer adId, Integer commentId);
+     boolean deleteComment(Integer adId, Integer commentId, String userDetails);
 
      /**
       * Изменить комментарий
@@ -38,7 +38,7 @@ public interface CommentService {
       * @param commentId идентификатор изменяемого комментария
       * @return измененный комментарий
       */
-     CommentDto updateComment(Integer adId, Integer commentId);
+     CommentDto updateComment(Integer adId, Integer commentId, String userDetails);
 
      /**
       * Получить комментарий

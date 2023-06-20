@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.service.CommentService;
+
+import java.security.Principal;
 
 /**
  * контроллер для работы с комментариями
@@ -41,8 +44,9 @@ public class CommentController {
     )
 
     public ResponseEntity<Comment> addComment(@PathVariable("id") Integer id,
-                                              @RequestBody CreateComment comments) {
-        Comment comment = commentService.saveComment(id, comments);
+                                              @RequestBody CreateComment comments,
+                                              Principal principal) {
+        Comment comment = commentService.saveComment(id, comments,  principal.getName());
         return ResponseEntity.ok(comment);
     }
 
@@ -85,8 +89,15 @@ public class CommentController {
     )
 
     public ResponseEntity<Object> deleteComment(@PathVariable Integer adId,
-                                                @PathVariable Integer commentId) {
-        return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId));
+                                                @PathVariable Integer commentId,
+                                                Principal principal) {
+        try {
+            return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId,
+                    principal.getName()));
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PatchMapping("{adId}/comments/{commentId}")
@@ -109,8 +120,14 @@ public class CommentController {
 
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
-                                                    @RequestBody Comment comment) {
-        CommentDto commentDto = commentService.updateComment(adId, commentId);
-        return ResponseEntity.ok().body(commentDto);
+                                                    @RequestBody Comment comment,
+                                                    Principal principal) {
+        try {
+            CommentDto commentDto = commentService.updateComment(adId, commentId, principal.getName());
+            return ResponseEntity.ok().body(commentDto);
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+}
 }

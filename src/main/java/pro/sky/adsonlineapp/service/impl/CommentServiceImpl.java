@@ -1,20 +1,27 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.model.Comment;
+import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.AdsRepository;
 import pro.sky.adsonlineapp.repository.CommentRepository;
+import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.CommentService;
 import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.CommentMappingUtils;
 import pro.sky.adsonlineapp.utils.CreateCommentMappingUtils;
+
+import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
 
 /**
  * Бизнес-логика по работе с комментариями.
@@ -27,43 +34,54 @@ public class CommentServiceImpl implements CommentService {
     private final AdsRepository adsRepository;
     private final CreateCommentMappingUtils createComments;
     private final CommentMappingUtils comments;
+    private final UserRepository userRepository;
 
     @Override
-    public Comment saveComment(Integer id, CreateComment dto) {
+    public Comment saveComment(Integer id, CreateComment dto, String userDetails) {
         if (!validationService.validate(dto)) {
             throw new ValidationException(dto.toString());
+        }
+        User user = userRepository.findByUsername(userDetails);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
         Comment entity = createComments.mapToEntity(dto);
         return commentRepository.save(entity);
     }
 
     @Override
-    public boolean deleteComment(Integer adId, Integer commentId) {
-        Ad ad = adsRepository.findById(adId).orElse(null);
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        if (ad == null) {
-            return false;
-        } else if (comment == null || !comment.getAd().equals(ad)) {
-            return false;
-        } else {
-            commentRepository.delete(comment);
-            return true;
+    public CommentDto updateComment(Integer adId, Integer commentId, String userDetails) {
+        Ad ad = adsRepository.findById(adId)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        if (comment.getAuthor().getUsername().equals(userDetails)
+                || comment.getAuthor().getRole().equals(Role.ADMIN)
+                && ad.getAuthor().getUsername().equals(userDetails)
+                || ad.getAuthor().getRole().equals(Role.ADMIN) ) {
+        commentRepository.updateCommentById(adId, commentId);
+            CommentDto commentDto = comments.mapToDto(comment);
+            return commentDto;
+        }else {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
     @Override
     @Transactional
-    public CommentDto updateComment(Integer adId, Integer commentId) {
-        Ad ad = adsRepository.findById(adId).orElse(null);
-        Comment comment = commentRepository.findById(commentId).orElse(null);
-        if (ad == null) {
-            throw new NotFoundEntityException("отсутствует такое объявление");
-        } else if (comment == null || !comment.getAd().equals(ad)) {
-            throw new NotFoundEntityException("отсутствует такой комментарий");
+    public boolean deleteComment(Integer adId, Integer commentId, String userDetails) {
+        Ad ad = adsRepository.findById(adId)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        if (comment.getAuthor().getUsername().equals(userDetails)
+                || comment.getAuthor().getRole().equals(Role.ADMIN)
+                && ad.getAuthor().getUsername().equals(userDetails)
+                || ad.getAuthor().getRole().equals(Role.ADMIN) ) {
+            commentRepository.delete(comment);
+            return true;
         } else {
-            comment = commentRepository.updateCommentById(adId, commentId);
-            CommentDto commentDto = comments.mapToDto(comment);
-            return commentDto;
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
     }
 
