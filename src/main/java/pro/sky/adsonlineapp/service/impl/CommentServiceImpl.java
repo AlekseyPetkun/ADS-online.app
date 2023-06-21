@@ -2,6 +2,7 @@ package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -64,16 +65,25 @@ public class CommentServiceImpl implements CommentService {
 
 //        Ad ad = adsRepository.findById(adId)
 //                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
-
+        User authorOrAdmin = userRepository.findByUsername(userDetails);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (comment.getAuthor().getUsername().equals(userDetails)
-                || comment.getAuthor().getRole().equals(Role.ADMIN)
+                || authorOrAdmin.getRole().equals(Role.ADMIN)
                 /*&& ad.getAuthor().getUsername().equals(userDetails)
                 || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
 
-            commentRepository.updateCommentById(dto.getText(), commentId);
+            comment.setText(dto.getText());
+            commentRepository.save(comment);
+//            comment = commentRepository.updateCommentById(
+//                    dto.getAuthor(),
+//                    dto.getAuthorImage(),
+//                    dto.getAuthorFirstName(),
+//                    dto.getCreatedAt(),
+//                    dto.getText(),
+//                    commentId);
+
             CommentDto commentDto = comments.mapToDto(comment);
             return commentDto;
         } else {
@@ -88,11 +98,12 @@ public class CommentServiceImpl implements CommentService {
 //        Ad ad = adsRepository.findById(adId)
 //                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
+        User authorOrAdmin = userRepository.findByUsername(userDetails);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (comment.getAuthor().getUsername().equals(userDetails)
-                || comment.getAuthor().getRole().equals(Role.ADMIN)
+                || authorOrAdmin.getRole().equals(Role.ADMIN)
                 /*&& ad.getAuthor().getUsername().equals(userDetails)
                 || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
 
@@ -104,7 +115,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseWrapperComment getComments(Integer id, String username) {
+    public ResponseWrapperComment getComments(Integer id) {
 
         List<Comment> commentsEntity = commentRepository.findByAdId(id);
         List<CommentDto> dto = new ArrayList<>();

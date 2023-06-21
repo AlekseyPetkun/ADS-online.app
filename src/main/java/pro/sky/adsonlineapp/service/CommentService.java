@@ -46,7 +46,7 @@ public interface CommentService {
       * @param id идентификатор комментария
       * @return комментарий
       */
-     ResponseWrapperComment getComments(Integer id, String username);
+     ResponseWrapperComment getComments(Integer id);
 
 }
 

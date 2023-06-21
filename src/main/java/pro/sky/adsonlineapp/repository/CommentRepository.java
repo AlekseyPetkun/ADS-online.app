@@ -15,18 +15,30 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     /**
      * Изменить комментарий
-     * @param pk идентификатор объявления
+     *
      * @param commentId идентификатор комментария
      * @return сущность комментария
      */
     @Modifying
     @Query("UPDATE Comment c SET " +
-            "c.text = :text WHERE c.commentId = :comment_id")
+            "c.author.id = :authorId, " +
+            "c.author.image = :authorImage, " +
+            "c.author.firstName = :firstName, " +
+            "c.createdAt = :create_at, " +
+            "c.text = :text " +
+            "WHERE c.commentId = :comment_id")
     Comment updateCommentById(
+            @Param("create_at") Integer createdAt,
+            @Param("firstName") String firstName,
+            @Param("authorImage") String authorImage,
+            @Param("authorId") Integer authorId,
             @Param("text") String text,
             @Param("comment_id") Integer commentId);
 
     Comment findByAuthor_Id(Integer id);
+
     List<Comment> findByAdId(Integer id);
+
+
 }
 
