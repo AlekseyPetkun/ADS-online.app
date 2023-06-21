@@ -14,6 +14,7 @@ import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.service.AuthService;
 
 
+import static pro.sky.adsonlineapp.constants.Role.ADMIN;
 import static pro.sky.adsonlineapp.constants.Role.USER;
 
 /**

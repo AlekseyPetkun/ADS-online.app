@@ -90,11 +90,12 @@ public class AdsServiceImpl implements AdsService {
     @Override
     public boolean deleteAdById(Integer id, String userDetails) {
 
+        User authorOrAdmin = userRepository.findByUsername(userDetails);
         Ad entity = adsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
-                || entity.getAuthor().getRole().equals(Role.ADMIN)) {
+                || authorOrAdmin.getRole().equals(Role.ADMIN)) {
 
             adsRepository.delete(entity);
             return true;
@@ -111,11 +112,13 @@ public class AdsServiceImpl implements AdsService {
             throw new ValidationException(dto.toString());
         }
 
+        User authorOrAdmin = userRepository.findByUsername(userDetails);
         Ad entity = adsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
-                || entity.getAuthor().getRole().equals(Role.ADMIN)) {
+                || authorOrAdmin.getRole().equals(Role.ADMIN)) {
+
             entity = adsRepository.updateAdsById(
                     dto.getDescription(),
                     dto.getPrice(),

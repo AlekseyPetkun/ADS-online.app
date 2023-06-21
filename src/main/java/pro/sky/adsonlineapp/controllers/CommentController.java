@@ -52,7 +52,6 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
-
     @GetMapping("/{id}/comments")
     @Operation(
             summary = "Получить комментарии объявления",
@@ -67,10 +66,9 @@ public class CommentController {
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
 
-    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id,
-                                                              Principal principal) {
+    public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id) {
 
-        ResponseWrapperComment commentDto = commentService.getComments(id, principal.getName());
+        ResponseWrapperComment commentDto = commentService.getComments(id);
         return ResponseEntity.ok(commentDto);
     }
 
@@ -96,7 +94,7 @@ public class CommentController {
                                            @PathVariable Integer commentId,
                                            Principal principal) {
         try {
-            return ResponseEntity.ok().body(commentService.deleteComment(adId, commentId,
+            return ResponseEntity.ok(commentService.deleteComment(adId, commentId,
                     principal.getName()));
         } catch (RuntimeException e) {
             e.getStackTrace();
@@ -128,7 +126,7 @@ public class CommentController {
                                                     Principal principal) {
         try {
             CommentDto commentDto = commentService.updateComment(adId, commentId, comment, principal.getName());
-            return ResponseEntity.ok().body(commentDto);
+            return ResponseEntity.ok(commentDto);
         } catch (RuntimeException e) {
             e.getStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
