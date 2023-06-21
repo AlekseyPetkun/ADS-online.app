@@ -4,6 +4,8 @@ package pro.sky.adsonlineapp.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Сущность комментария
@@ -17,8 +19,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "comment_id")
-    private Integer commentId;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -32,6 +33,6 @@ public class Comment {
     private Ad ad;
 
     @Column(name = "create_at")
-    private long createdAt;
+    private Instant createdAt; // localDateTime
 }
 

@@ -1,8 +1,10 @@
 package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.NewPassword;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.exceptions.CurrentPasswordNotMatch;
@@ -34,14 +36,15 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            throw new NotFoundEntityException(NOT_FOUND_ENTITY);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         if (user.getPassword().equals(encoder.encode(password.getCurrentPassword()))) {
-            userRepository.updatePassword(user.getId(), encoder.encode(password.getNewPassword()));
+            user.setPassword(encoder.encode(password.getNewPassword()));
+            userRepository.save(user);
             return true;
         } else {
-            throw new CurrentPasswordNotMatch("Старые пароли не совпадают!");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
     }
@@ -62,15 +65,22 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto user, String username) {
 
         User userDB = userRepository.findByUsername(username);
-        User userEntity = userRepository.updateUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone(),
-                user.getEmail(),
-                user.getImage(),
-                userDB.getId());
+        userDB.setId(user.getId());
+        userDB.setFirstName(user.getFirstName());
+        userDB.setLastName(user.getLastName());
+        userDB.setPhone(user.getPhone());
+        userDB.setImage(user.getImage());
+        userDB.setEmail(user.getEmail());
+//        User userEntity = userRepository.updateUser(
+//                user.getFirstName(),
+//                user.getLastName(),
+//                user.getPhone(),
+//                user.getEmail(),
+//                user.getImage(),
+//                userDB.getId());
+        userRepository.save(userDB);
 
-        return userMapper.mapToDto(userEntity);
+        return userMapper.mapToDto(userDB);
 
     }
 

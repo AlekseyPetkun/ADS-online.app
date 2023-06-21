@@ -1,11 +1,13 @@
 package pro.sky.adsonlineapp.utils;
 
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.model.Comment;
-import pro.sky.adsonlineapp.utils.MappingUtils;
 
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Бизнес-логика по маппингу комментариев (Comment).
@@ -18,18 +20,11 @@ public class CommentMappingUtils {
         CommentDto dto = new CommentDto();
         dto.setAuthor(entity.getAuthor().getId());
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
-        dto.setPk(entity.getCommentId());
+        dto.setPk(entity.getId());
         dto.setAuthorImage(entity.getAuthor().getImage());
-        dto.setCreatedAt((int) entity.getCreatedAt());
+        dto.setCreatedAt(Instant.now().compareTo(entity.getCreatedAt()));
         dto.setText(entity.getText());
 
         return dto;
-    }
-
-    public Comment mapToEntity(CommentDto dto) {
-        Comment entity = new Comment();
-        entity.setCommentId(dto.getPk());
-        entity.setText(dto.getText());
-        return entity;
     }
 }

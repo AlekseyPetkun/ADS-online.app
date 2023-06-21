@@ -36,43 +36,6 @@ public class WebSecurityConfig {
             "/register"
     };
 
-//    @Bean
-//    public JdbcUserDetailsManager users(DataSource dataSource) {
-//
-//        UserDetails admin =
-//                User.builder()
-//                        .username("user@gmail.com")
-//                        .password("password")
-//                        .passwordEncoder((plainText) -> passwordEncoder().encode(plainText))
-//                        .roles("ADMIN")
-//                        .build();
-//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-////        if (jdbcUserDetailsManager.userExists(admin.getUsername())) {
-////            jdbcUserDetailsManager.deleteUser(admin.getUsername());
-////        }
-////        jdbcUserDetailsManager.createUser(admin);
-//        return jdbcUserDetailsManager;
-//    }
-
-//    @Bean
-//    public DaoAuthenticationProvider daoAuthenticationProvider() {
-//
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//        daoAuthenticationProvider.setUserDetailsService(securityUser);
-//
-//        return daoAuthenticationProvider;
-//    }
-
-//    @Bean
-//    public JdbcUserDetailsManager users(DataSource dataSource) {
-//
-//
-//        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-//
-//        return jdbcUserDetailsManager;
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf()
@@ -82,7 +45,7 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                                         .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
-//                                        .mvcMatchers(ENDPOINTS_FOR_ADMINS).hasRole("ADMIN")
+//                                        .mvcMatchers(HttpMethod.DELETE, "/ads").hasRole("ADMIN")
 //                                        .mvcMatchers(ENDPOINTS_FOR_USERS).hasRole("USER")
                                         .mvcMatchers("/ads/**", "/users/**").authenticated())
                 .cors()

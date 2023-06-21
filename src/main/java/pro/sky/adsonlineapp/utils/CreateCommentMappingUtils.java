@@ -7,7 +7,10 @@ import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.utils.MappingUtils;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Бизнес-логика по маппингу создание комментариев (CreateComment).
@@ -15,19 +18,13 @@ import java.time.LocalDateTime;
 @Service
 public class CreateCommentMappingUtils {
 
-//    public CreateComment mapToDto(Comment entity) {
-//        CreateComment dto = new CreateComment();
-//        dto.setText(entity.getText());
-//        return dto;
-//    }
-
     public Comment mapToEntity(CreateComment dto, User author, Ad ad) {
 
         Comment entity = new Comment();
         entity.setText(dto.getText());
         entity.setAd(ad);
         entity.setAuthor(author);
-        entity.setCreatedAt(System.nanoTime());
+        entity.setCreatedAt(Instant.now());
 
         return entity;
     }
