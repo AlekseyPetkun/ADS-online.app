@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.model.Ad;
+import pro.sky.adsonlineapp.model.User;
 
 import java.util.List;
 
@@ -25,11 +26,11 @@ public interface AdsRepository extends JpaRepository<Ad, Integer> {
      * @return измененная сущность объявления
      */
     @Modifying
-    @Query("UPDATE Ad a SET " +
-            "a.description = :description, " +
-            "a.price = :price," +
-            "a.title = :title" +
-            " WHERE a.pk = :id")
+    @Query(value = "UPDATE ads SET " +
+            "description = :description, " +
+            "price = :price," +
+            "title = :title" +
+            " WHERE id = :id", nativeQuery=true)
     Ad updateAdsById(
             @Param("description") String description,
             @Param("price") Integer price,
@@ -48,4 +49,7 @@ public interface AdsRepository extends JpaRepository<Ad, Integer> {
 //            @Param("description") String description);
 
     List<Ad> findByDescriptionContainingIgnoreCase(String description);
+    List<Ad> findByAuthor(User author);
+
+
 }

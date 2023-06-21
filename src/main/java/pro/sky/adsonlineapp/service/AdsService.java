@@ -1,16 +1,10 @@
 package pro.sky.adsonlineapp.service;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Ad;
-
-import java.util.List;
 
 /**
  * Сервис по работе с объявлениями.
@@ -27,11 +21,12 @@ public interface AdsService {
     /**
      * Добавить объявление
      *
-     * @param dto   тело запроса
-     * @param image картинка товара
+     * @param dto         тело запроса
+     * @param image       картинка товара
+     * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto addAd(CreateAds dto, MultipartFile image);
+    AdsDto addAd(CreateAds dto, MultipartFile image, String userDetails);
 
     /**
      * Получить информацию об объявлении по id
@@ -44,29 +39,33 @@ public interface AdsService {
     /**
      * Удалить объявление по id
      *
-     * @param id идентификатор объявления
+     * @param id          идентификатор объявления
+     * @param userDetails информация о пользователе
      * @return true or false
      */
-    boolean deleteAdById(Integer id);
+    boolean deleteAdById(Integer id, String userDetails);
 
     /**
      * Обновить информацию об объявлении по id
      *
-     * @param id  идентификатор объявления
-     * @param dto тело изменения
+     * @param id          идентификатор объявления
+     * @param dto         тело изменения
+     * @param userDetails информация о пользователе
      * @return информация об объявлении
      */
-    AdsDto updateAdsById(Integer id, CreateAds dto);
+    AdsDto updateAdsById(Integer id, CreateAds dto, String userDetails);
 
     /**
      * Получить объявления авторизованного пользователя
      *
+     * @param userDetails информация о пользователе
      * @return объявления пользователя
      */
-    ResponseWrapperAds getAdsMe();
+    ResponseWrapperAds getAdsMe(String userDetails);
 
     /**
      * Поиск объявлений по названию
+     *
      * @param description название объявления
      * @return найденные объявления
      */

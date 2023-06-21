@@ -1,4 +1,4 @@
-package pro.sky.adsonlineapp.utils.impl;
+package pro.sky.adsonlineapp.utils;
 
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CreateComment;
@@ -7,25 +7,25 @@ import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.utils.MappingUtils;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.Date;
 
+/**
+ * Бизнес-логика по маппингу создание комментариев (CreateComment).
+ */
 @Service
-public class CreateCommentMappingUtilsImpl implements MappingUtils<CreateComment, Comment> {
+public class CreateCommentMappingUtils {
 
-    @Override
-    public CreateComment mapToDto(Comment entity) {
-        CreateComment dto = new CreateComment();
-        dto.setText(entity.getText());
-        return dto;
-    }
+    public Comment mapToEntity(CreateComment dto, User author, Ad ad) {
 
-    @Override
-    public Comment mapToEntity(CreateComment dto) {
         Comment entity = new Comment();
-        Ad ad = new Ad();
-        User author = new User();
         entity.setText(dto.getText());
         entity.setAd(ad);
         entity.setAuthor(author);
+        entity.setCreatedAt(Instant.now());
+
         return entity;
     }
 }

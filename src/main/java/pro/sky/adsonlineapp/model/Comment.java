@@ -1,24 +1,25 @@
 package pro.sky.adsonlineapp.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
+/**
+ * Сущность комментария
+ */
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name = "comments")
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer commentId;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -30,5 +31,8 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "ad_id")
     private Ad ad;
+
+    @Column(name = "create_at")
+    private Instant createdAt; // localDateTime
 }
 

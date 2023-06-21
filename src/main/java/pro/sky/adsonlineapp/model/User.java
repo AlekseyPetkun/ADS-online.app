@@ -11,21 +11,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.Collection;
 
 /**
- * Модель пользователя
+ * Сущность пользователя
  */
-
-@NoArgsConstructor
-@AllArgsConstructor
-//@Builder
-@Getter
-@Setter
 @Entity
-@Slf4j
-@Cacheable
-//@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
 
@@ -40,8 +34,8 @@ public class User {
     /**
      * Логин пользователя
      */
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "username")
+    private String username;
 
     /**
      * Имя пользователя
@@ -59,7 +53,6 @@ public class User {
      * mail пользователя
      */
     @Column(name = "email", nullable = false, unique = true)
-//    @NaturalId
     private String email;
 
     /**
@@ -77,9 +70,9 @@ public class User {
     /**
      * Фото пользователя
      */
-  //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-  //  @OneToOne(mappedBy = "user")
-   // private Pictures pictures;
+    //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+    //  @OneToOne(mappedBy = "user")
+    // private Pictures pictures;
 
 
     /**
@@ -87,10 +80,12 @@ public class User {
      */
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
-//    @Builder.Default
     private Role role;
 
     private String image;
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Ad> ads;
 
 //    @PostPersist
 //    public void logUserAdded() {
@@ -114,10 +109,4 @@ public class User {
 //        return Objects.hash(email);
 //    }
 
-    public User(String firstName, String lastName, String email, String phone) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phone = phone;
-    }
 }

@@ -1,36 +1,35 @@
-package pro.sky.adsonlineapp.utils.impl;
+package pro.sky.adsonlineapp.utils;
 
 import org.springframework.stereotype.Service;
+import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
-import pro.sky.adsonlineapp.utils.MappingUtils;
 
 /**
  * Бизнес-логика по маппингу пользователей (UserDto).
  */
 @Service
-public class UserMapper implements MappingUtils<UserDto, User> {
+public class UserMapperUtils {
 
-    public User mapToEntity(UserDto dto) {
+    public User mapToEntity(RegisterReq dto){
 
         User entity = new User();
-        entity.setId(dto.getId());
-
-      //entity.setUserName(dto.getUserName());
+        entity.setUsername(dto.getUsername());
+        entity.setEmail(dto.getUsername());
+        entity.setPassword(dto.getPassword());
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setPhone(dto.getPhone());
-        //entity.setPicture(dto.getPicture);
+        entity.setRole(dto.getRole());
 
-      return entity;
+        return entity;
     }
 
     public UserDto mapToDto(User entity) {
 
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
-
-        //dto.setUserName(entity.getUserName());
+        dto.setEmail(entity.getEmail());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());

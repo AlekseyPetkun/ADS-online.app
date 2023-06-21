@@ -1,50 +1,98 @@
 package pro.sky.adsonlineapp.service.impl;
 
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+import pro.sky.adsonlineapp.dto.NewPassword;
 import pro.sky.adsonlineapp.dto.UserDto;
+import pro.sky.adsonlineapp.exceptions.CurrentPasswordNotMatch;
+import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.UserService;
-import pro.sky.adsonlineapp.utils.impl.UserMapper;
+import pro.sky.adsonlineapp.utils.UserMapperUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import static pro.sky.adsonlineapp.constants.Message.*;
 
-        /**
-        * Сервис для работы с Пользователями
-        */
-        @Service
-        public class UserServiceImpl implements UserService {
 
-            private final UserRepository userRepository;
-            private final UserMapper userMapper;
+/**
+ * Бизнес-логика по работе с пользователями.
+ */
+@Service
+@AllArgsConstructor
+public class UserServiceImpl implements UserService {
 
-            public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
-                this.userRepository = userRepository;
-                this.userMapper = userMapper;
-            }
+    private final UserRepository userRepository;
+    private final UserMapperUtils userMapper;
+    private final PasswordEncoder encoder;
 
-            @Override
-            public boolean setPassword(String currentPassword, String newPassword) {
-                return false;
-            }
+    @Override
+    @Transactional
+    public boolean setPassword(NewPassword password, String username) {
 
-            @Override
-            public UserDto getUser() {
-
-                User user = userRepository.findById(1).orElse(null);
-                if (user != null) {
-                    return userMapper.mapToDto(user);
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public boolean updateUser(User user) {
-                return false;
-            }
-            @Override
-            public boolean updateUserImage(MultipartFile image) {
-                return false;
-            }
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+
+        if (user.getPassword().equals(encoder.encode(password.getCurrentPassword()))) {
+            user.setPassword(encoder.encode(password.getNewPassword()));
+            userRepository.save(user);
+            return true;
+        } else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
+    @Override
+    public UserDto getUser(String username) {
+
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return userMapper.mapToDto(user);
+        } else {
+            throw new NotFoundEntityException(NOT_FOUND_ENTITY);
+        }
+    }
+
+    @Override
+    @Transactional
+    public UserDto updateUser(UserDto user, String username) {
+
+        User userDB = userRepository.findByUsername(username);
+        userDB.setId(user.getId());
+        userDB.setFirstName(user.getFirstName());
+        userDB.setLastName(user.getLastName());
+        userDB.setPhone(user.getPhone());
+        userDB.setImage(user.getImage());
+        userDB.setEmail(user.getEmail());
+//        User userEntity = userRepository.updateUser(
+//                user.getFirstName(),
+//                user.getLastName(),
+//                user.getPhone(),
+//                user.getEmail(),
+//                user.getImage(),
+//                userDB.getId());
+        userRepository.save(userDB);
+
+        return userMapper.mapToDto(userDB);
+
+    }
+
+    @Override
+    public boolean updateUserImage(MultipartFile image) {
+        return false;
+    }
+
+    //  @Override
+    //  public boolean updateUserPicture(MultipartFile image) {
+    // return false;
+    // }
+
+}
+
