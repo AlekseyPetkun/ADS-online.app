@@ -26,7 +26,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
             "c.author.firstName = :firstName, " +
             "c.createdAt = :create_at, " +
             "c.text = :text " +
-            "WHERE c.commentId = :comment_id")
+            "WHERE c.id = :comment_id")
     Comment updateCommentById(
             @Param("create_at") Integer createdAt,
             @Param("firstName") String firstName,

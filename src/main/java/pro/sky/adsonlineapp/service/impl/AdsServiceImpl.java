@@ -2,6 +2,8 @@ package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +24,7 @@ import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -95,9 +98,9 @@ public class AdsServiceImpl implements AdsService {
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
-                || authorOrAdmin.getRole().equals(Role.ADMIN)) {
+                || authorOrAdmin.getRole() == Role.ADMIN) {
 
-            adsRepository.delete(entity);
+            adsRepository.deleteById(id);
             return true;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -117,7 +120,7 @@ public class AdsServiceImpl implements AdsService {
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (entity.getAuthor().getUsername().equals(userDetails)
-                || authorOrAdmin.getRole().equals(Role.ADMIN)) {
+                || authorOrAdmin.getRole() == (Role.ADMIN)) {
 
             entity.setDescription(dto.getDescription());
             entity.setPrice(dto.getPrice());

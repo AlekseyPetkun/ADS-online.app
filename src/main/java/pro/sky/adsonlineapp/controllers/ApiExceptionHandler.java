@@ -23,16 +23,16 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<String> handlerNotFoundEntityException(NotFoundEntityException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
     public ResponseEntity<String> handlerNotFoundResponseWrapperAdsException(NotFoundResponseWrapperAdsException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler
     public ResponseEntity<String> handlerCurrentPasswordNotMatch(CurrentPasswordNotMatch e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 

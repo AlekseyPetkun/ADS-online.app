@@ -26,7 +26,6 @@ public class AdsMappingUtils {
 
     public Ad mapToEntity(CreateAds dto, User author) {
 
-//        User author = new User();
         Ad adsEntity = new Ad();
         adsEntity.setDescription(dto.getDescription());
         adsEntity.setTitle(dto.getTitle());

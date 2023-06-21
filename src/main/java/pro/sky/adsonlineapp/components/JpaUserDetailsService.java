@@ -1,6 +1,5 @@
 package pro.sky.adsonlineapp.components;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,12 +16,9 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         User userFromDb = userRepository.findByUsername(username);
 
-        SecurityUser securityUser = new SecurityUser(userFromDb);
-        return new org.springframework.security.core.userdetails.User(
-                userFromDb.getUsername(),
-                userFromDb.getPassword(),
-                securityUser.getAuthorities());
+        return new SecurityUser(userFromDb);
     }
 }

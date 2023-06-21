@@ -7,8 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import pro.sky.adsonlineapp.components.JpaUserDetailsService;
-import pro.sky.adsonlineapp.components.SecurityUser;
 import pro.sky.adsonlineapp.dto.RegisterReq;
 import pro.sky.adsonlineapp.constants.Role;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
@@ -26,31 +24,22 @@ import pro.sky.adsonlineapp.utils.UserMapperUtils;
 public class AuthServiceImpl implements AuthService {
 
     //    private final UserDetailsManager manager;
-    //  private final UserDetailsService manager;
-//  private final JdbcUserDetailsManager manager;
     private final PasswordEncoder encoder;
-    private final UserMapperUtils mapp;
+    private final UserMapperUtils userMapperUtils;
     private final UserRepository userRepository;
     private final ValidationService validationService;
-    private final SecurityUser securityUser;
-    //    private final JpaUserDetailsService jpaUserDetailsService;
     private final UserDetailsService userDetailsService;
 
 
     @Override
     public boolean login(String userName, String password) {
-//    UserDetails foundUser = manager.loadUserByUsername(userName);
-//    String encryptedPassword = foundUser.getPassword();
-//    return encoder.matches(password, encryptedPassword);
 
-//        if (!manager.userExists(userName)) {
-//            return false;
-//        }
         User user = userRepository.findByUsername(userName);
+
         if (user == null
                 || !user.getUsername().equals(userName)
                 && !user.getPassword().equals(encoder.encode(password))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
@@ -62,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByUsername(registerReq.getUsername());
         if (user != null) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
         if (!validationService.validate(registerReq)) {
@@ -72,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         try {
             registerReq.setRole(role);
             registerReq.setPassword(encoder.encode(registerReq.getPassword()));
-            User newUser = mapp.mapToUserEntity(registerReq);
+            User newUser = userMapperUtils.mapToEntity(registerReq);
             userRepository.save(newUser);
             return true;
         } catch (RuntimeException e) {
@@ -93,5 +82,4 @@ public class AuthServiceImpl implements AuthService {
 
 //        return true;
     }
-
 }

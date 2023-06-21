@@ -63,16 +63,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto updateComment(Integer adId, Integer commentId, CommentDto dto, String userDetails) {
 
-//        Ad ad = adsRepository.findById(adId)
-//                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
         User authorOrAdmin = userRepository.findByUsername(userDetails);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (comment.getAuthor().getUsername().equals(userDetails)
-                || authorOrAdmin.getRole().equals(Role.ADMIN)
-                /*&& ad.getAuthor().getUsername().equals(userDetails)
-                || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
+                || authorOrAdmin.getRole() == (Role.ADMIN)) {
 
             comment.setText(dto.getText());
             commentRepository.save(comment);
@@ -92,22 +88,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public boolean deleteComment(Integer adId, Integer commentId, String userDetails) {
-
-//        Ad ad = adsRepository.findById(adId)
-//                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         User authorOrAdmin = userRepository.findByUsername(userDetails);
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         if (comment.getAuthor().getUsername().equals(userDetails)
-                || authorOrAdmin.getRole().equals(Role.ADMIN)
-                /*&& ad.getAuthor().getUsername().equals(userDetails)
-                || ad.getAuthor().getRole().equals(Role.ADMIN)*/) {
+                || authorOrAdmin.getRole() == (Role.ADMIN)) {
 
-            commentRepository.delete(comment);
+            commentRepository.deleteById(commentId);
             return true;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
