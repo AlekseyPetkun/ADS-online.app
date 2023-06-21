@@ -17,7 +17,7 @@ public class FullAdsMappingUtils {
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
         dto.setTitle(entity.getTitle());
-        dto.setEmail(entity.getAuthor().getEmail());
+        dto.setEmail(entity.getAuthor().getUsername());
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setAuthorLastName(entity.getAuthor().getLastName());
         dto.setPk(entity.getId());

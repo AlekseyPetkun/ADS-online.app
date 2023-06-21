@@ -92,7 +92,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public boolean deleteComment(Integer adId, Integer commentId, String userDetails) {
 
 //        Ad ad = adsRepository.findById(adId)

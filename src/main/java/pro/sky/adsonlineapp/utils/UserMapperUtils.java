@@ -42,7 +42,7 @@ public class UserMapperUtils {
 
         UserDto dto = new UserDto();
         dto.setId(entity.getId());
-        dto.setEmail(entity.getEmail());
+        dto.setEmail(entity.getUsername());
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());

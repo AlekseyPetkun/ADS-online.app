@@ -62,15 +62,22 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto user, String username) {
 
         User userDB = userRepository.findByUsername(username);
-        User userEntity = userRepository.updateUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getPhone(),
-                user.getEmail(),
-                user.getImage(),
-                userDB.getId());
+        userDB.setId(user.getId());
+        userDB.setFirstName(user.getFirstName());
+        userDB.setLastName(user.getLastName());
+        userDB.setPhone(user.getPhone());
+        userDB.setImage(user.getImage());
+        userDB.setEmail(user.getEmail());
+//        User userEntity = userRepository.updateUser(
+//                user.getFirstName(),
+//                user.getLastName(),
+//                user.getPhone(),
+//                user.getEmail(),
+//                user.getImage(),
+//                userDB.getId());
+        userRepository.save(userDB);
 
-        return userMapper.mapToDto(userEntity);
+        return userMapper.mapToDto(userDB);
 
     }
 

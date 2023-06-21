@@ -119,11 +119,11 @@ public class AdsServiceImpl implements AdsService {
         if (entity.getAuthor().getUsername().equals(userDetails)
                 || authorOrAdmin.getRole().equals(Role.ADMIN)) {
 
-            entity = adsRepository.updateAdsById(
-                    dto.getDescription(),
-                    dto.getPrice(),
-                    dto.getTitle(),
-                    id);
+            entity.setDescription(dto.getDescription());
+            entity.setPrice(dto.getPrice());
+            entity.setTitle(dto.getTitle());
+
+            adsRepository.save(entity);
 
             AdsDto adsDto = adsMapping.mapToDto(entity);
 
