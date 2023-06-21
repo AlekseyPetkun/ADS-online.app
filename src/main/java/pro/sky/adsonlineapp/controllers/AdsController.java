@@ -162,7 +162,7 @@ public class AdsController {
 
         } catch (RuntimeException e) {
             e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -200,7 +200,7 @@ public class AdsController {
 
         } catch (RuntimeException e) {
             e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
