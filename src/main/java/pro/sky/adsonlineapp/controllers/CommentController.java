@@ -98,7 +98,7 @@ public class CommentController {
                     principal.getName()));
         } catch (RuntimeException e) {
             e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
@@ -129,7 +129,7 @@ public class CommentController {
             return ResponseEntity.ok(commentDto);
         } catch (RuntimeException e) {
             e.getStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }
