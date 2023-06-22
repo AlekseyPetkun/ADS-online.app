@@ -18,7 +18,7 @@ public class AdsMappingUtils {
         dto.setPk(entity.getId());
         dto.setTitle(entity.getTitle());
         dto.setPrice(entity.getPrice());
-        dto.setImage(entity.getImage());
+        //dto.setImage(entity.getImage());
         dto.setAuthor(entity.getAuthor().getId());
 
         return dto;
@@ -30,7 +30,7 @@ public class AdsMappingUtils {
         adsEntity.setDescription(dto.getDescription());
         adsEntity.setTitle(dto.getTitle());
         adsEntity.setPrice(dto.getPrice());
-//        adsEntity.setImage(dto.getImage());
+       // adsEntity.setImage(dto.getImage());
         adsEntity.setAuthor(author);
 
         return adsEntity;

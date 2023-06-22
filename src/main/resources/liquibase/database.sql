@@ -21,7 +21,7 @@ create table ads
     author_id   int REFERENCES users (id),
     price       int,
     title       text,
-    image       text,
+    image       oid,
     description text
 );
 

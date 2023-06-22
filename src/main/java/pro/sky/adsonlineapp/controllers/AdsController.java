@@ -16,7 +16,6 @@ import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.service.AdsService;
 
 import java.io.IOException;
@@ -237,7 +236,7 @@ public class AdsController {
         }
     }
 
-    @PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    /*@PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(
             summary = "Обновить картинку объявления",
             responses = {
@@ -262,10 +261,10 @@ public class AdsController {
     )
 
     public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
-                                               @RequestPart MultipartFile image) {
+                                                 @RequestPart MultipartFile image) {
 
         return ResponseEntity.ok().build();
-    }
+    }*/
 
     @GetMapping("/found_ads")
     @Operation(
