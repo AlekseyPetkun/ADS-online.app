@@ -84,7 +84,7 @@ public class User {
 
     private String image;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Ad> ads;
 
 //    @PostPersist

@@ -28,7 +28,7 @@ public class Comment {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "ad_id")
     private Ad ad;
 
