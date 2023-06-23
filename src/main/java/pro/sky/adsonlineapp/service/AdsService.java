@@ -70,4 +70,6 @@ public interface AdsService {
      * @return найденные объявления
      */
     ResponseWrapperAds findByDescriptionAd(String description);
+
+    byte[] getImageById(String id);
 }

@@ -16,6 +16,7 @@ import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
+import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.service.AdsService;
 
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class AdsController {
 
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image,
-                                        Principal principal) throws IOException {
+                                        Principal principal) {
 
 
         try {
@@ -296,5 +297,16 @@ public class AdsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+    @GetMapping(value = "image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+    public ResponseEntity<byte[]> getImage(@PathVariable String id) {
 
+        try {
+            byte[] imageBytes = adsService.getImageById(id);
+            return ResponseEntity.ok(imageBytes);
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

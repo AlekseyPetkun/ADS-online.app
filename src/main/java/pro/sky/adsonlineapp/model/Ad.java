@@ -40,17 +40,20 @@ public class Ad {
     @Column(name = "description")
     private String description;
 
-    @Lob
-    @Column(name = "image")
-    private byte[] image;
+//    @Lob
+//    @Column(name = "image")
+//    private byte[] image;
+
+    @Column(name = "image_path")
+    private String imagePath;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id") //, foreignKey = @ForeignKey(name = "fk_ads_users"))
     private User author;
 
-    /*@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "image")
-    private Picture picture;*/
+    private Picture picture;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ad"
             , cascade = CascadeType.ALL, orphanRemoval = true)
