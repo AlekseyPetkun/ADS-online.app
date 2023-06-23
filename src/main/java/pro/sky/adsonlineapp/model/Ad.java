@@ -2,18 +2,9 @@ package pro.sky.adsonlineapp.model;
 
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
-
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 /**

@@ -1,13 +1,20 @@
 package pro.sky.adsonlineapp.service.impl;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.repository.ImageRepository;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.UUID;
+
+import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
+
 @Service
 public class ImageServiceIMPL {
     private final ImageRepository imageRepository;
@@ -24,14 +31,18 @@ public class ImageServiceIMPL {
         } catch (IOException e) {
 
         }
-        ad.setImage(UUID.randomUUID().toString().getBytes());
         Ad savedEntity = imageRepository.saveAndFlush(ad);
         return savedEntity.getId();
     }
 
-    public Optional<Object> image(Integer id) {
+    public byte[] image(Integer id) {
+        byte[] image = imageRepository.findById(id).orElseThrow().getImage();
 
-        return null;
+            HttpHeaders hed = new HttpHeaders();
+            hed.setContentType(MediaType.IMAGE_PNG);
+            return image;
+
+
     }
 
 }

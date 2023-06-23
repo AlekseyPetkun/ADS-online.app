@@ -24,6 +24,7 @@ import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +73,12 @@ public class AdsServiceImpl implements AdsService {
 
         Ad entity = adsMapping.mapToEntity(dto, user);
 
+        try {
+            byte[] bytes = image.getBytes();
+            entity.setImage(bytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         adsRepository.save(entity);
 
         AdsDto adsDto = adsMapping.mapToDto(entity);
