@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-
-        if (user.getPassword().equals(encoder.encode(password.getCurrentPassword()))) {
+        if (encoder.matches(password.getCurrentPassword(), user.getPassword())) {
             user.setPassword(encoder.encode(password.getNewPassword()));
             userRepository.save(user);
             return true;
