@@ -38,5 +38,6 @@ create table comments
 create table pictures
 (
     id          text primary key,
-    image       oid
+    image       oid,
+    data        bytea
 );

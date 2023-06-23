@@ -163,7 +163,7 @@ public class UserController {
             },
             tags = "Пользователи"
     )
-    @PatchMapping(value = "/me/picture", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image) {
         if (userService.updateUserImage(image)) {
             return ResponseEntity.ok().build();
