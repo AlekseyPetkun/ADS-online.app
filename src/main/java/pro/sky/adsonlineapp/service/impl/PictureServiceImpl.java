@@ -22,7 +22,7 @@ public class PictureServiceImpl implements PictureService {
         Picture picture = new Picture();
         try {
             byte[] bytes = image.getBytes();
-            picture.setImage(bytes);
+            picture.setData(bytes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -14,6 +14,7 @@ import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.ImageRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.UserService;
+import pro.sky.adsonlineapp.utils.ImageUtils;
 import pro.sky.adsonlineapp.utils.UserMapperUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,17 +96,25 @@ public class UserServiceImpl implements UserService {
 
         Picture picture = new Picture();
         picture.setId(UUID.randomUUID().toString());
-        try {
+        //try {
             // код, который кладет картинку в entity
-            byte[] bytes = image.getBytes();
+            //byte[] bytes = image.getBytes();
+            //byte[] bytes = new byte[] { 1, 2, 3, 4, 5};
+            //picture.setData(bytes);
+        //} catch (IOException e) {
+        //    throw new RuntimeException(e);
+        //}
 
-            picture.setImage(bytes);
+        // код сохранения картинки в БД
+        //imageRepository.saveAndFlush(picture);
+        try {
+            imageRepository.save(Picture.builder()
+                    .id(image.getOriginalFilename())
+                    //.type(image.getContentType())
+                    .data(ImageUtils.compressImage(image.getBytes())).build());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // код сохранения картинки в БД
-        imageRepository.saveAndFlush(picture);
         return true;
     }
 

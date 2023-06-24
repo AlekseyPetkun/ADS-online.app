@@ -100,6 +100,7 @@ public class UserController {
 
         UserDto user = userService.getUser(principal.getName());
         if (user != null) {
+            user.setImage("stupid face2.png");
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

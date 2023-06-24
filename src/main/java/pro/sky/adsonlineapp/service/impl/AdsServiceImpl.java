@@ -175,7 +175,7 @@ public class AdsServiceImpl implements AdsService {
 
         Picture picture = pictureRepository.findById(id).orElseThrow(()
                 -> new NotFoundEntityException(NOT_FOUND_ENTITY));
-        byte[] imageBytes = picture.getImage();
+        byte[] imageBytes = picture.getData();
 
         return imageBytes;
     }

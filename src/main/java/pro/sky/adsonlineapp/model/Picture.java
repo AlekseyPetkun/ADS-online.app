@@ -1,15 +1,15 @@
 package pro.sky.adsonlineapp.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@Builder
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "pictures")
 public class Picture {
 
@@ -17,6 +17,6 @@ public class Picture {
     private String id;
 
     @Lob
-    @Column(name = "image")
-    private byte[] image;
+    @Column(name = "data")
+    private byte[] data;
 }
