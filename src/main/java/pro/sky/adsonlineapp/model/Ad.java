@@ -16,7 +16,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
-
 /**
  * Сущность объявления.
  */
@@ -41,30 +40,23 @@ public class Ad {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "image")
-    private String image;
+//    @Lob
+//    @Column(name = "image")
+//    private byte[] image;
+
+    @Column(name = "image_path")
+    private String imagePath;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id") //, foreignKey = @ForeignKey(name = "fk_ads_users"))
     private User author;
 
-//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "image")
-//    private Picture picture;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image")
+    private Picture picture;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad"
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ad"
             , cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Comment> comments;
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        Ad ad = (Ad) o;
-//        return getId() != null && Objects.equals(getId(), ad.getId());
-//    }
-//    @Override
-//    public int hashCode() {
-//        return getClass().hashCode();
-//    }
 }

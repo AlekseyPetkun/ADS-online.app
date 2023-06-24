@@ -2,8 +2,6 @@ package pro.sky.adsonlineapp.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,17 +14,20 @@ import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.Ad;
+import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.AdsRepository;
+import pro.sky.adsonlineapp.repository.PictureRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.AdsService;
 import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
 
-import java.security.Principal;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
@@ -46,6 +47,8 @@ public class AdsServiceImpl implements AdsService {
     private final UserRepository userRepository;
     private final AdsMappingUtils adsMapping;
     private final FullAdsMappingUtils fullAdsMapping;
+    private final PictureServiceImpl pictureService;
+    private final PictureRepository pictureRepository;
 
 
     @Override
@@ -71,6 +74,8 @@ public class AdsServiceImpl implements AdsService {
         }
 
         Ad entity = adsMapping.mapToEntity(dto, user);
+
+        entity.setImagePath(pictureService.addImage(image));
 
         adsRepository.save(entity);
 
@@ -163,5 +168,15 @@ public class AdsServiceImpl implements AdsService {
                 .collect(Collectors.toList());
 
         return new ResponseWrapperAds(dto.size(), dto);
+    }
+
+    @Override
+    public byte[] getImageById(String id) {
+
+        Picture picture = pictureRepository.findById(id).orElseThrow(()
+                -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+        byte[] imageBytes = picture.getData();
+
+        return imageBytes;
     }
 }
