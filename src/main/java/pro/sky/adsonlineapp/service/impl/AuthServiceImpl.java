@@ -43,7 +43,10 @@ public class AuthServiceImpl implements AuthService {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-        return encoder.matches(password, userDetails.getPassword());
+        var authenticated = encoder.matches(password, userDetails.getPassword());
+        if (authenticated)
+            System.setProperty("user", user.getUsername());
+        return authenticated;
     }
 
     @Override

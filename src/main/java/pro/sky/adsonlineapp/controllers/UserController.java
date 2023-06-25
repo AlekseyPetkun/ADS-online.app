@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.service.UserService;
@@ -166,7 +168,11 @@ public class UserController {
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image) {
-        if (userService.updateUserImage(image)) {
+        var username = System.getProperty("user");
+        if (username == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        //var user = userService.getUser(username);
+        if (userService.updateUserImage(username, image)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

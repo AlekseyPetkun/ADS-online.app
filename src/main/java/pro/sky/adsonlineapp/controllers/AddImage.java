@@ -1,14 +1,20 @@
-package pro.sky.adsonlineapp.controllers;
+//package pro.sky.adsonlineapp.controllers;
 
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 //@Slf4j
 //@RestController
 //@RequiredArgsConstructor
+//@Service
 //@CrossOrigin(value = "http://localhost:3000")
 //@RequestMapping("/ads")
 //@Tag(name = "добавление картинки")
-public class AddImage {
+//public class AddImage {
 
-//    private final ImageServiceIMPL imageServiceIMPL;
+//    private final ImageServiceIMPL;
 //    private final AdsRepository adsRepository;
 //
 //    @PostMapping("/upl")
@@ -29,4 +35,4 @@ public class AddImage {
 //        return ResponseEntity.ok(imageBytes);
 //    }
 
-}
+//}
