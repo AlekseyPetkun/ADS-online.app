@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
+import pro.sky.adsonlineapp.service.PictureService;
 import pro.sky.adsonlineapp.service.UserService;
 import pro.sky.adsonlineapp.dto.NewPassword;
 
@@ -37,6 +38,7 @@ import java.security.Principal;
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
+    private final PictureService imageService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -102,7 +104,6 @@ public class UserController {
 
         UserDto user = userService.getUser(principal.getName());
         if (user != null) {
-            user.setImage("stupid face2.png");
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -177,5 +178,22 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @Operation(summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE,
+            MediaType.IMAGE_GIF_VALUE
+    })
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return imageService.loadImage(id) != null
+                ? ResponseEntity.ok(imageService.loadImage(id))
+                : ResponseEntity.notFound().build();
     }
 }

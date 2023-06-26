@@ -10,6 +10,14 @@ public interface PictureService {
 
     String addImage(MultipartFile image);
 
+    /**
+     * Загружает изображение по названию изображения
+     *
+     * @param fileName название изображения
+     * @return изображение в виде byte[]
+     */
+    byte[] loadImage(String fileName);
+
     byte[] loadImageFail(String fileName);
     Picture updateImageFail(MultipartFile image, Picture oldPicture);
 

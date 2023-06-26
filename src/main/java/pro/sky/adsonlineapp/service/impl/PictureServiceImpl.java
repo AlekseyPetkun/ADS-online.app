@@ -1,4 +1,5 @@
 package pro.sky.adsonlineapp.service.impl;
+import org.springframework.beans.factory.annotation.Value;
 import pro.sky.adsonlineapp.model.Picture;
 
 import lombok.AllArgsConstructor;
@@ -15,12 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.net.URL;
+import java.lang.String;
 import static java.nio.file.Files.*;
 
 @Slf4j
@@ -50,6 +54,8 @@ public class PictureServiceImpl implements PictureService {
  //       return null;
 //    }
     private final String desktopPath = System.getProperty("user.dir") + File.separator + "images";
+    //@Value("${default.image.url}")
+    //private String url;
 
 
     @Override
@@ -67,6 +73,26 @@ public class PictureServiceImpl implements PictureService {
         return picture.getId();
     }
 
+    @Override
+    public byte[] loadImage(String fileName) {
+        File image;
+        byte[] outputFileBytes = null;
+        try {
+            image = new File(desktopPath, fileName);
+            if (exists(image.toPath())) {
+                outputFileBytes = readAllBytes(image.toPath());
+                log.info("File loaded successfully");
+            } else {
+                try (InputStream in = new URL("").openStream()) {
+                    outputFileBytes = in.readAllBytes();
+                    log.info("File loaded default successfully");
+                }
+            }
+        } catch (IOException e) {
+            log.error("file load error");
+        }
+        return outputFileBytes;
+    }
 
     @Override
     public byte[] loadImageFail(String fileName) {
