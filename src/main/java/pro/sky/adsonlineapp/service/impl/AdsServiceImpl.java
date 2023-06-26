@@ -74,8 +74,8 @@ public class AdsServiceImpl implements AdsService {
         }
 
         Ad entity = adsMapping.mapToEntity(dto, user);
-
-        entity.setImagePath(pictureService.addImage(image));
+        String imageId = pictureService.addImage(image);
+        entity.setImagePath(imageId);
 
         adsRepository.save(entity);
 

@@ -81,11 +81,11 @@ public class PictureServiceImpl implements PictureService {
             image = new File(desktopPath, fileName);
             if (exists(image.toPath())) {
                 outputFileBytes = readAllBytes(image.toPath());
-                log.info("File loaded successfully");
+                log.info("loadImage: File loaded successfully");
             } else {
                 try (InputStream in = new URL("").openStream()) {
                     outputFileBytes = in.readAllBytes();
-                    log.info("File loaded default successfully");
+                    log.info("loadImage: File loaded default successfully");
                 }
             }
         } catch (IOException e) {
@@ -101,9 +101,9 @@ public class PictureServiceImpl implements PictureService {
         try {
             image = new File(desktopPath, fileName);
             outputFileBytes = readAllBytes(image.toPath());
-            log.info("File loaded successfully");
+            log.info("loadImageFail: File loaded successfully");
         } catch (IOException e) {
-            log.error("Error while loading file {}", fileName);
+            log.error("loadImageFail: Error while loading file {}", fileName);
 
         }
         return outputFileBytes;
