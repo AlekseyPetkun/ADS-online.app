@@ -8,6 +8,11 @@ import pro.sky.adsonlineapp.model.Picture;
  */
 public interface PictureService {
 
+    /**
+     * Загружаем новое изображение
+     * @param image новое изображение
+     * @return название файла
+     */
     String addImage(MultipartFile image);
 
     /**

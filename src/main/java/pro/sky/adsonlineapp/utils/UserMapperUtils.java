@@ -40,7 +40,12 @@ public class UserMapperUtils {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
-        dto.setImage(String.format("/users/image/%s", entity.getImage()));
+
+        if (entity.getImage() != null) {
+            dto.setImage(String.format("/users/image/%s", entity.getImage()));
+        } else {
+            dto.setImage(null);
+        }
 //        dto.setImage("/users/image/" + entity.getImage());
 
 //        log.info("mapToDto: dto.getImage = {}", dto.getImage());
