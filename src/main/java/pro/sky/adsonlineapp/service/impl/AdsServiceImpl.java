@@ -24,10 +24,8 @@ import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
@@ -178,5 +176,19 @@ public class AdsServiceImpl implements AdsService {
         byte[] imageBytes = picture.getData();
 
         return imageBytes;
+    }
+
+    @Override
+    public boolean updateAdImage(Integer id, MultipartFile image) {
+
+        String imageId = pictureService.addImage(image);
+        Ad entity = adsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
+
+        entity.setImagePath(imageId);
+        //userRepository.updateUser(user.getFirstName(), user.getLastName(), user.getPhone(), user.getEmail(), imageId, user.getId());
+        adsRepository.save(entity);
+
+        return true;
     }
 }

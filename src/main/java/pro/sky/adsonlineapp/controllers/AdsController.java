@@ -37,7 +37,7 @@ import java.security.Principal;
 public class AdsController {
 
     private final AdsService adsService;
-//    private final UserDetails userDetails;
+    //    private final UserDetails userDetails;
 //    private final Principal principal;
 //    private final UserService userService;
     private final PictureService pictureService;
@@ -239,7 +239,7 @@ public class AdsController {
         }
     }
 
-    /*@PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/{id}/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(
             summary = "Обновить картинку объявления",
             responses = {
@@ -263,11 +263,20 @@ public class AdsController {
             tags = "Объявления"
     )
 
-    public ResponseEntity<Picture> updateImage(@PathVariable Integer id,
-                                                 @RequestPart MultipartFile image) {
+    public ResponseEntity<?> updateAdImage(@PathVariable Integer id,
+                                           @RequestPart MultipartFile image) {
 
-        return ResponseEntity.ok().build();
-    }*/
+//        var username = System.getProperty("user");
+//        if (username == null)
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        //var user = userService.getUser(username);
+        try {
+            return ResponseEntity.ok().body(adsService.updateAdImage(id, image));
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 
     @GetMapping("/found_ads")
     @Operation(
@@ -299,18 +308,20 @@ public class AdsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-  //  @GetMapping(value = "image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
+
+
+    //  @GetMapping(value = "image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
     //public ResponseEntity<byte[]> getImage(@PathVariable String id) {
 
-  //      try {
-   //         byte[] imageBytes = adsService.getImageById(id);
-   //         return ResponseEntity.ok(imageBytes);
+    //      try {
+    //         byte[] imageBytes = adsService.getImageById(id);
+    //         return ResponseEntity.ok(imageBytes);
 
- //       } catch (RuntimeException e) {
-  //          e.getStackTrace();
+    //       } catch (RuntimeException e) {
+    //          e.getStackTrace();
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-  //      }
- //   }
+    //      }
+    //   }
     @Operation(
             summary = "Получить картинку объявления",
             tags = "Объявления",

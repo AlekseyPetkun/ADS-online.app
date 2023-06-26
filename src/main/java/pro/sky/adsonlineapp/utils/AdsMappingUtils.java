@@ -22,9 +22,10 @@ public class AdsMappingUtils {
         dto.setPrice(entity.getPrice());
         dto.setImage(entity.getImagePath());
         dto.setAuthor(entity.getAuthor().getId());
-        dto.setImage("/ads/image/" + entity.getImagePath());
+        dto.setImage(String.format("/ads/image/%s", entity.getImagePath()));
+//        dto.setImage("/ads/image/" + entity.getImagePath());
 
-        log.info("AdsMappingUtils.mapToDto: dto.getImage = {}", dto.getImage());
+//        log.info("AdsMappingUtils.mapToDto: dto.getImage = {}", dto.getImage());
 
         return dto;
     }
