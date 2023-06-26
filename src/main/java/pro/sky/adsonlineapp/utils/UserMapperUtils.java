@@ -16,7 +16,7 @@ import java.io.File;
 @Slf4j
 public class UserMapperUtils {
 
-    private final String imagesPath = System.getProperty("user.dir") + File.separator + "images";
+//    private final String imagesPath = System.getProperty("user.dir") + File.separator + "images";
 
     public User mapToEntity(RegisterReq dto){
 
@@ -40,9 +40,10 @@ public class UserMapperUtils {
         dto.setFirstName(entity.getFirstName());
         dto.setLastName(entity.getLastName());
         dto.setPhone(entity.getPhone());
-        dto.setImage("/users/image/" + entity.getImage());
+        dto.setImage(String.format("/users/image/%s", entity.getImage()));
+//        dto.setImage("/users/image/" + entity.getImage());
 
-        log.info("mapToDto: dto.getImage = {}", dto.getImage());
+//        log.info("mapToDto: dto.getImage = {}", dto.getImage());
 
         return dto;
     }

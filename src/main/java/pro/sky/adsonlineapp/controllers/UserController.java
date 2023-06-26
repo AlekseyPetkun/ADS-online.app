@@ -168,15 +168,18 @@ public class UserController {
             tags = "Пользователи"
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image) {
-        var username = System.getProperty("user");
-        if (username == null)
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image,
+                                             Principal principal) {
+
+//        var username = System.getProperty("user");
+//        if (username == null)
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         //var user = userService.getUser(username);
-        if (userService.updateUserImage(username, image)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        try {
+            return ResponseEntity.ok().body(userService.updateUserImage(principal.getName(), image));
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

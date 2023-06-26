@@ -7,21 +7,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.NewPassword;
 import pro.sky.adsonlineapp.dto.UserDto;
-import pro.sky.adsonlineapp.exceptions.CurrentPasswordNotMatch;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
-import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.ImageRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.PictureService;
 import pro.sky.adsonlineapp.service.UserService;
-import pro.sky.adsonlineapp.utils.ImageUtils;
 import pro.sky.adsonlineapp.utils.UserMapperUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.UUID;
 
 import static pro.sky.adsonlineapp.constants.Message.*;
 
@@ -33,7 +27,7 @@ import static pro.sky.adsonlineapp.constants.Message.*;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final PictureService imageService;
+    private final PictureService pictureService;
     private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final UserMapperUtils userMapper;
@@ -48,7 +42,7 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        if (user.getPassword().equals(encoder.encode(password.getCurrentPassword()))) {
+        if (encoder.matches(password.getCurrentPassword(), user.getPassword())) {
             user.setPassword(encoder.encode(password.getNewPassword()));
             userRepository.save(user);
             return true;
@@ -95,10 +89,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUserImage(String username, MultipartFile image) {
-        String imageId = imageService.addImage(image);
+
+        String imageId = pictureService.addImage(image);
         User user = userRepository.findByUsername(username);
-        if (user == null)
+
+        if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         user.setImage(imageId);
         //userRepository.updateUser(user.getFirstName(), user.getLastName(), user.getPhone(), user.getEmail(), imageId, user.getId());
@@ -106,11 +103,5 @@ public class UserServiceImpl implements UserService {
 
         return true;
     }
-
-    //  @Override
-    //  public boolean updateUserPicture(MultipartFile image) {
-    // return false;
-    // }
-
 }
 

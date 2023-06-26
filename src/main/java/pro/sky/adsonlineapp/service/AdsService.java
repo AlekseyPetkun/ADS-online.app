@@ -72,4 +72,6 @@ public interface AdsService {
     ResponseWrapperAds findByDescriptionAd(String description);
 
     byte[] getImageById(String id);
+
+    boolean updateAdImage(Integer id, MultipartFile image);
 }
