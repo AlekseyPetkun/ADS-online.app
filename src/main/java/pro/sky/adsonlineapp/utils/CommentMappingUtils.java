@@ -26,7 +26,13 @@ public class CommentMappingUtils {
         dto.setAuthor(entity.getAuthor().getId());
         dto.setAuthorFirstName(entity.getAuthor().getFirstName());
         dto.setPk(entity.getId());
-        dto.setAuthorImage(String.format("/ads/image/%s", entity.getAuthor().getImage()));
+
+        if (entity.getAuthor().getImage() != null) {
+            dto.setAuthorImage(String.format("/ads/image/%s", entity.getAuthor().getImage()));
+        } else {
+            dto.setAuthorImage(null);
+        }
+
         //dto.setCreatedAt(Instant.now().compareTo(entity.getCreatedAt()));
         dto.setCreatedAt(ldt);
         dto.setText(entity.getText());
