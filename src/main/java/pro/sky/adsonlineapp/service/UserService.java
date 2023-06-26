@@ -40,6 +40,7 @@ public interface UserService {
      * @param image аватар
      * @return true or false
      */
-    boolean updateUserImage(MultipartFile image);
+    boolean updateUserImage(String username, MultipartFile image);
+
 }
 

@@ -28,13 +28,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             @Param("newPassword") String newPassword);
 
     @Modifying
-    @Query("UPDATE User u SET " +
-            "u.firstName = :first_name, " +
-            "u.lastName = :last_name," +
-            "u.phone = :phone," +
-            "u.email = :email," +
-            "u.image = :image" +
-            " WHERE u.id = :id")
+    @Query("UPDATE User SET " +
+            "firstName = :first_name, " +
+            "lastName = :last_name," +
+            "phone = :phone," +
+            "email = :email," +
+            "image = :image" +
+            " WHERE id = :id")
     User updateUser(
             @Param("first_name") String firstName,
             @Param("last_name") String lastName,

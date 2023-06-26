@@ -5,10 +5,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
+import pro.sky.adsonlineapp.service.PictureService;
 import pro.sky.adsonlineapp.service.UserService;
 import pro.sky.adsonlineapp.dto.NewPassword;
 
@@ -35,6 +38,7 @@ import java.security.Principal;
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
+    private final PictureService imageService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -100,7 +104,6 @@ public class UserController {
 
         UserDto user = userService.getUser(principal.getName());
         if (user != null) {
-            user.setImage("stupid face2.png");
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -165,11 +168,35 @@ public class UserController {
             tags = "Пользователи"
     )
     @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image) {
-        if (userService.updateUserImage(image)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image,
+                                             Principal principal) {
+
+//        var username = System.getProperty("user");
+//        if (username == null)
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        //var user = userService.getUser(username);
+        try {
+            return ResponseEntity.ok().body(userService.updateUserImage(principal.getName(), image));
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+    }
+
+    @Operation(summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE,
+            MediaType.IMAGE_GIF_VALUE
+    })
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+        return imageService.loadImage(id) != null
+                ? ResponseEntity.ok(imageService.loadImage(id))
+                : ResponseEntity.notFound().build();
     }
 }

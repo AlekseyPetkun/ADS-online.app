@@ -1,5 +1,6 @@
 package pro.sky.adsonlineapp.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
@@ -10,6 +11,7 @@ import pro.sky.adsonlineapp.model.User;
  * Бизнес-логика по маппингу объявлений (Ads).
  */
 @Service
+@Slf4j
 public class AdsMappingUtils {
 
     public AdsDto mapToDto(Ad entity) {
@@ -20,6 +22,10 @@ public class AdsMappingUtils {
         dto.setPrice(entity.getPrice());
         dto.setImage(entity.getImagePath());
         dto.setAuthor(entity.getAuthor().getId());
+        dto.setImage(String.format("/ads/image/%s", entity.getImagePath()));
+//        dto.setImage("/ads/image/" + entity.getImagePath());
+
+//        log.info("AdsMappingUtils.mapToDto: dto.getImage = {}", dto.getImage());
 
         return dto;
     }
