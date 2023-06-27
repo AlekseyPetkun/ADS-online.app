@@ -28,7 +28,6 @@ public class FullAdsMappingUtils {
         } else {
             dto.setImage(null);
         }
-//        dto.setImage("/ads/image/" + entity.getImagePath());
 
         return dto;
     }

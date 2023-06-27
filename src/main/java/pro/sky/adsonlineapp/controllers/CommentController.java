@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.dto.CreateComment;
 import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
+import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.Comment;
 import pro.sky.adsonlineapp.service.CommentService;
 import pro.sky.adsonlineapp.service.PictureService;
@@ -33,8 +34,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    private final PictureService pictureService;
-
     @PostMapping("/{id}/comments")
     @Operation(
             summary = "Добавить комментарий к объявлению",
@@ -48,13 +47,17 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы оставить комментарий необходимо авторизоваться"
     )
-
     public ResponseEntity<CommentDto> addComment(@PathVariable("id") Integer id,
                                                  @RequestBody CreateComment comments,
                                                  Principal principal) {
 
-        CommentDto comment = commentService.saveComment(id, comments, principal.getName());
-        return ResponseEntity.ok(comment);
+        try {
+            CommentDto comment = commentService.saveComment(id, comments, principal.getName());
+            return ResponseEntity.ok(comment);
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @GetMapping("/{id}/comments")
@@ -70,11 +73,15 @@ public class CommentController {
             responseCode = "401",
             description = "для того чтобы найти комментарий необходимо авторизоваться"
     )
-
     public ResponseEntity<ResponseWrapperComment> getComments(@PathVariable("id") Integer id) {
 
-        ResponseWrapperComment commentDto = commentService.getComments(id);
-        return ResponseEntity.ok(commentDto);
+        try {
+            ResponseWrapperComment commentDto = commentService.getComments(id);
+            return ResponseEntity.ok(commentDto);
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
@@ -94,13 +101,11 @@ public class CommentController {
             responseCode = "403",
             description = "отсутствуют права доступа"
     )
-
     public ResponseEntity<?> deleteComment(@PathVariable Integer adId,
                                            @PathVariable Integer commentId,
                                            Principal principal) {
         try {
-            return ResponseEntity.ok(commentService.deleteComment(adId, commentId,
-                    principal.getName()));
+            return ResponseEntity.ok(commentService.deleteComment(adId, commentId, principal.getName()));
         } catch (RuntimeException e) {
             e.getStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -124,11 +129,11 @@ public class CommentController {
             responseCode = "403",
             description = "отсутствуют права доступа"
     )
-
     public ResponseEntity<CommentDto> updateComment(@PathVariable Integer adId,
                                                     @PathVariable Integer commentId,
                                                     @RequestBody CommentDto comment,
                                                     Principal principal) {
+
         try {
             CommentDto commentDto = commentService.updateComment(adId, commentId, comment, principal.getName());
             return ResponseEntity.ok(commentDto);

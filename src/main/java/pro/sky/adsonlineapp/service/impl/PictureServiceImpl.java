@@ -1,4 +1,5 @@
 package pro.sky.adsonlineapp.service.impl;
+
 import pro.sky.adsonlineapp.model.Picture;
 
 import lombok.AllArgsConstructor;
@@ -12,10 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.net.URL;
 import java.lang.String;
+
 import static java.nio.file.Files.*;
 
 @Slf4j
@@ -23,31 +24,8 @@ import static java.nio.file.Files.*;
 @Transactional
 @AllArgsConstructor
 public class PictureServiceImpl implements PictureService {
-//    private final PictureRepository imageRepository;
 
- //   @Override
-//    public String addImage(MultipartFile image) {
-
- //       Picture picture = new Picture();
- //       try {
-//            byte[] bytes = image.getBytes();
- //           picture.setData(bytes);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-// }
- //       picture.setId(UUID.randomUUID().toString());
-//        Picture savedEntity = imageRepository.saveAndFlush(picture);
- //       return savedEntity.getId();
- //   }
-
- //   public Optional<Object> image(Integer id) {
-
- //       return null;
-//    }
     private final String desktopPath = System.getProperty("user.dir") + File.separator + "images";
-//    @Value("${path.to.pictures.folder}")
-//    private String desktopPath;
-
 
     @Override
     public String addImage(MultipartFile image) {
@@ -98,39 +76,8 @@ public class PictureServiceImpl implements PictureService {
             log.info("loadImageFail: File loaded successfully");
         } catch (IOException e) {
             log.error("loadImageFail: Error while loading file {}", fileName);
-
         }
         return outputFileBytes;
-    }
-
-    @Override
-    public Picture updateImageFail(MultipartFile image, Picture oldPicture) {
-
-        Picture newImage = new Picture();
-        try {
-            String fileName = UUID.randomUUID() + type(image);
-            createDirectories(Paths.get(desktopPath));
-            deleteImageFail(oldPicture);
-            image.transferTo(new File(desktopPath + File.separator + fileName));
-            newImage.setId(fileName);
-            log.info("File updated successfully");
-        } catch (IOException e) {
-            log.error("Error while updating file {}", oldPicture.getId());
-        }
-        return newImage;
-    }
-
-
-    @Override
-    public void deleteImageFail(Picture picture) {
-
-        Path path = Paths.get(desktopPath + File.separator + picture.getId());
-        try {
-            deleteIfExists(path);
-            log.info("File deleted successfully");
-        } catch (IOException e) {
-            log.error("Error while deleting file {}", picture.getId());
-        }
     }
 
     private String type(MultipartFile image) {
@@ -138,6 +85,7 @@ public class PictureServiceImpl implements PictureService {
         String type = image.getContentType();
         assert type != null;
         type = type.replace("image/", ".");
+
         return type;
     }
 }

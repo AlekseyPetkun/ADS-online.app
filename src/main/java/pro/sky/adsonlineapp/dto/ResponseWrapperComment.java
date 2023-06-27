@@ -15,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseWrapperComment {
-    // общее количество комментариев
-    @JsonProperty("count")
-    private Integer count;
 
-    @JsonProperty("results")
-    private List<CommentDto> results;
+    private Integer count; // общее количество комментариев
+    private List<CommentDto> results; // все комментарии
 }

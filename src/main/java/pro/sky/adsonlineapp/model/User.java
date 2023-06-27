@@ -68,45 +68,21 @@ public class User {
     private String phone;
 
     /**
-     * Фото пользователя
-     */
-    //  @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
-    //  @OneToOne(mappedBy = "user")
-    // private Pictures pictures;
-
-
-    /**
      * Права доступа пользователя
      */
     @Column(name = "user_role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    /**
+     * Фото пользователя
+     */
+    @Column(name = "image")
     private String image;
 
+    /**
+     * Объявления пользователя
+     */
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Ad> ads;
-
-//    @PostPersist
-//    public void logUserAdded() {
-//        log.info(
-//                "Added user: email={}, role={}",
-//                email,
-//                role
-//        );
-//    }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-//        User user = (User) o;
-//        return getEmail() != null && Objects.equals(getEmail(), user.getEmail());
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(email);
-//    }
-
 }

@@ -34,8 +34,11 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
             @Param("text") String text,
             @Param("comment_id") Integer commentId);
 
-    Comment findByAuthor_Id(Integer id);
-
+    /**
+     * Поиск комментария по идентификатору объявления
+     * @param id идентификатор объявления
+     * @return список найденных комментариев
+     */
     List<Comment> findByAdId(Integer id);
 
 

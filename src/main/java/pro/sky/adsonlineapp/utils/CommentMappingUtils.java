@@ -1,14 +1,10 @@
 package pro.sky.adsonlineapp.utils;
 
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 import pro.sky.adsonlineapp.dto.CommentDto;
 import pro.sky.adsonlineapp.model.Comment;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.TimeZone;
 
 /**
@@ -33,7 +29,6 @@ public class CommentMappingUtils {
             dto.setAuthorImage(null);
         }
 
-        //dto.setCreatedAt(Instant.now().compareTo(entity.getCreatedAt()));
         dto.setCreatedAt(ldt);
         dto.setText(entity.getText());
 

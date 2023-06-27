@@ -35,6 +35,7 @@ import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
 @Service
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
+
     private final ValidationService validationService;
     private final CommentRepository commentRepository;
     private final AdsRepository adsRepository;
@@ -57,6 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
         Comment entity = createComments.mapToEntity(dto, user, ad);
         commentRepository.save(entity);
+
         return comments.mapToDto(entity);
     }
 
@@ -72,15 +74,9 @@ public class CommentServiceImpl implements CommentService {
 
             comment.setText(dto.getText());
             commentRepository.save(comment);
-//            comment = commentRepository.updateCommentById(
-//                    dto.getAuthor(),
-//                    dto.getAuthorImage(),
-//                    dto.getAuthorFirstName(),
-//                    dto.getCreatedAt(),
-//                    dto.getText(),
-//                    commentId);
 
             CommentDto commentDto = comments.mapToDto(comment);
+
             return commentDto;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -99,6 +95,7 @@ public class CommentServiceImpl implements CommentService {
                 || authorOrAdmin.getRole() == (Role.ADMIN)) {
 
             commentRepository.deleteById(commentId);
+
             return true;
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);

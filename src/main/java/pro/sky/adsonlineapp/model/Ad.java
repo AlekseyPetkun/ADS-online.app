@@ -2,18 +2,9 @@ package pro.sky.adsonlineapp.model;
 
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
-
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 
 /**
@@ -23,40 +14,53 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "ads")
 public class Ad {
 
+    /**
+     * Id объявления
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
+    /**
+     * Цена объявления
+     */
     @Column(name = "price")
     private Integer price;
 
+    /**
+     * Описание объявления
+     */
     @Column(name = "title")
     private String title;
 
+    /**
+     * Название объявления
+     */
     @Column(name = "description")
     private String description;
 
-//    @Lob
-//    @Column(name = "image")
-//    private byte[] image;
-
+    /**
+     * Картинка объявления
+     */
     @Column(name = "image_path")
     private String imagePath;
 
+    /**
+     * Автор объявления
+     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "author_id") //, foreignKey = @ForeignKey(name = "fk_ads_users"))
+    @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "image")
-    private Picture picture;
-
+    /**
+     * Комментарии объявления
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ad"
             , cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Comment> comments;
-
 }

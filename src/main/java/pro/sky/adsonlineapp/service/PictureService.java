@@ -24,8 +24,4 @@ public interface PictureService {
     byte[] loadImage(String fileName);
 
     byte[] loadImageFail(String fileName);
-
-    Picture updateImageFail(MultipartFile image, Picture oldPicture);
-
-    void deleteImageFail(Picture picture);
 }

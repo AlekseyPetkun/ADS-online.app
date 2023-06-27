@@ -28,7 +28,7 @@ public class ValidationServiceImpl implements ValidationService {
                     && ((RegisterReq) object).getLastName() != null
                     && ((RegisterReq) object).getPhone() != null;
 
-        }else if (object instanceof CreateComment) {
+        } else if (object instanceof CreateComment) {
             return ((CreateComment) object).getText() != null;
         }
 
