@@ -22,7 +22,12 @@ public class FullAdsMappingUtils {
         dto.setAuthorLastName(entity.getAuthor().getLastName());
         dto.setPk(entity.getId());
         dto.setPhone(entity.getAuthor().getPhone());
-        dto.setImage(String.format("/ads/image/%s", entity.getImagePath()));
+
+        if (entity.getImagePath() != null) {
+            dto.setImage(String.format("/ads/image/%s", entity.getImagePath()));
+        } else {
+            dto.setImage(null);
+        }
 //        dto.setImage("/ads/image/" + entity.getImagePath());
 
         return dto;
