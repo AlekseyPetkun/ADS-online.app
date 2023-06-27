@@ -16,6 +16,29 @@ Development team:
 - Под каждым объявлением пользователи могут оставлять отзывы.
 - В заголовке сайта можно осуществлять поиск объявлений по названию.
 - Показывать и сохранять картинки объявлений.
+  
+
+  **Спецификация**
+  
+(https://github.com/Aleksey2710/ADS-online.app/blob/master/openapi.yaml)
+
+Установка и запуск образа фронтэнд-части в Docker:
+
+docker run --rm -p 3000:3000 ghcr.io/bizinmitya/front-react-avito:v1.17
+
+
+  **Использован следующий стек технологий:**
+  
+Java11
+SpringBoot
+Swagger
+Hibernate
+PostgreSQL
+Lombok
+JUnit 
+Mockito
+Docker
+
 
   **Структура базы данных:**
   
