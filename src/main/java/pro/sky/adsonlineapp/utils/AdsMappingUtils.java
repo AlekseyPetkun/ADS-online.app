@@ -29,10 +29,6 @@ public class AdsMappingUtils {
             dto.setImage(null);
         }
 
-//        dto.setImage("/ads/image/" + entity.getImagePath());
-
-//        log.info("AdsMappingUtils.mapToDto: dto.getImage = {}", dto.getImage());
-
         return dto;
     }
 

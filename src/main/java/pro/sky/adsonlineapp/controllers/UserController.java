@@ -5,10 +5,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.server.ResponseStatusException;
+import pro.sky.adsonlineapp.dto.ResponseWrapperComment;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.service.PictureService;
@@ -37,8 +36,9 @@ import java.security.Principal;
 @RequiredArgsConstructor
 @RequestMapping("users")
 public class UserController {
+
     private final UserService userService;
-    private final PictureService imageService;
+    private final PictureService pictureService;
 
     @Operation(
             summary = "Обновление пароля",
@@ -73,6 +73,7 @@ public class UserController {
         }
     }
 
+    @GetMapping("/me")
     @Operation(
             summary = "Получить информацию об авторизованном пользователе",
             responses = {
@@ -99,17 +100,18 @@ public class UserController {
             },
             tags = "Пользователи"
     )
-    @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Principal principal) {
 
-        UserDto user = userService.getUser(principal.getName());
-        if (user != null) {
+        try {
+            UserDto user = userService.getUser(principal.getName());
             return ResponseEntity.ok(user);
-        } else {
+        } catch (RuntimeException e) {
+            e.getStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 
+    @PatchMapping("/me")
     @Operation(
             summary = "Обновить информацию об авторизованном пользователе",
             responses = {
@@ -140,7 +142,6 @@ public class UserController {
             },
             tags = "Пользователи"
     )
-    @PatchMapping("/me")
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto dto,
                                               Principal principal) {
 
@@ -153,6 +154,7 @@ public class UserController {
         }
     }
 
+    @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(
             summary = "Обновить аватар авторизованного пользователя",
             responses = {
@@ -167,14 +169,9 @@ public class UserController {
             },
             tags = "Пользователи"
     )
-    @PatchMapping(value = "/me/image", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateUserImage(@RequestPart(name = "image") MultipartFile image,
                                              Principal principal) {
 
-//        var username = System.getProperty("user");
-//        if (username == null)
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        //var user = userService.getUser(username);
         try {
             return ResponseEntity.ok().body(userService.updateUserImage(principal.getName(), image));
         } catch (RuntimeException e) {
@@ -183,20 +180,24 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Получить аватар пользователя",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
-                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
-            })
     @GetMapping(value = "/image/{id}", produces = {
             MediaType.IMAGE_PNG_VALUE,
             MediaType.IMAGE_JPEG_VALUE,
             MediaType.APPLICATION_OCTET_STREAM_VALUE,
             MediaType.IMAGE_GIF_VALUE
     })
+    @Operation(summary = "Получить аватар пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
+            })
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return imageService.loadImage(id) != null
-                ? ResponseEntity.ok(imageService.loadImage(id))
-                : ResponseEntity.notFound().build();
+
+        try {
+            return ResponseEntity.ok(pictureService.loadImage(id));
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }

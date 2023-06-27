@@ -13,31 +13,34 @@ public interface UserService {
     /**
      * Обновление пароля
      *
-     * @param currentPassword старый пароль
-     * @param newPassword     новый пароль
-     * @return обновленный пароль
+     * @param password новый пароль
+     * @param username информация о пользователе
+     * @return true or false
      */
     boolean setPassword(NewPassword password, String username);
 
     /**
      * Получить информацию об авторизованном пользователе
      *
-     * @return информация о пользователе
+     * @param username информация о пользователе
+     * @return пользователь
      */
     UserDto getUser(String username);
 
     /**
      * Обновить информацию об авторизованном пользователе
      *
-     * @param user пользователь
-     * @return true or false
+     * @param user     пользователь
+     * @param username информация о пользователе
+     * @return измененный пользователей
      */
     UserDto updateUser(UserDto user, String username);
 
     /**
      * Обновить аватар авторизованного пользователя
      *
-     * @param image аватар
+     * @param username информация о пользователе
+     * @param image    новый аватар
      * @return true or false
      */
     boolean updateUserImage(String username, MultipartFile image);

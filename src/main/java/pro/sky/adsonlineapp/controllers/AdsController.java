@@ -16,11 +16,9 @@ import pro.sky.adsonlineapp.dto.AdsDto;
 import pro.sky.adsonlineapp.dto.CreateAds;
 import pro.sky.adsonlineapp.dto.FullAds;
 import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
-import pro.sky.adsonlineapp.model.Ad;
 import pro.sky.adsonlineapp.service.AdsService;
 import pro.sky.adsonlineapp.service.PictureService;
 
-import java.io.IOException;
 import java.security.Principal;
 
 /**
@@ -37,11 +35,7 @@ import java.security.Principal;
 public class AdsController {
 
     private final AdsService adsService;
-    //    private final UserDetails userDetails;
-//    private final Principal principal;
-//    private final UserService userService;
     private final PictureService pictureService;
-
 
     @GetMapping
     @Operation(
@@ -89,11 +83,9 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
     public ResponseEntity<AdsDto> addAd(@RequestPart CreateAds properties,
                                         @RequestPart(name = "image") MultipartFile image,
                                         Principal principal) {
-
 
         try {
             AdsDto adsDto = adsService.addAd(properties, image, principal.getName());
@@ -155,7 +147,6 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
     public ResponseEntity<?> removeAd(@PathVariable Integer id,
                                       Principal principal) {
 
@@ -191,7 +182,6 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
     public ResponseEntity<AdsDto> updateAds(@PathVariable Integer id,
                                             @RequestBody CreateAds ads,
                                             Principal principal) {
@@ -225,9 +215,7 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
     public ResponseEntity<ResponseWrapperAds> getAdsMe(Principal principal) {
-
 
         try {
             ResponseWrapperAds dto = adsService.getAdsMe(principal.getName());
@@ -262,14 +250,9 @@ public class AdsController {
             },
             tags = "Объявления"
     )
-
     public ResponseEntity<?> updateAdImage(@PathVariable Integer id,
                                            @RequestPart MultipartFile image) {
 
-//        var username = System.getProperty("user");
-//        if (username == null)
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        //var user = userService.getUser(username);
         try {
             return ResponseEntity.ok().body(adsService.updateAdImage(id, image));
         } catch (RuntimeException e) {
@@ -309,19 +292,11 @@ public class AdsController {
         }
     }
 
-
-    //  @GetMapping(value = "image/{id}", produces = {MediaType.IMAGE_PNG_VALUE})
-    //public ResponseEntity<byte[]> getImage(@PathVariable String id) {
-
-    //      try {
-    //         byte[] imageBytes = adsService.getImageById(id);
-    //         return ResponseEntity.ok(imageBytes);
-
-    //       } catch (RuntimeException e) {
-    //          e.getStackTrace();
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    //      }
-    //   }
+    @GetMapping(value = "/image/{id}", produces = {
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE
+    })
     @Operation(
             summary = "Получить картинку объявления",
             tags = "Объявления",
@@ -329,13 +304,15 @@ public class AdsController {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Not found", content = @Content())
             })
-    @GetMapping(value = "/image/{id}", produces = {
-            MediaType.IMAGE_PNG_VALUE,
-            MediaType.IMAGE_JPEG_VALUE,
-            MediaType.APPLICATION_OCTET_STREAM_VALUE
-    })
-    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
-        return ResponseEntity.ok(pictureService.loadImageFail(id));
-    }
 
+    public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) {
+
+        try {
+            return ResponseEntity.ok(pictureService.loadImageFail(id));
+
+        } catch (RuntimeException e) {
+            e.getStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
 }

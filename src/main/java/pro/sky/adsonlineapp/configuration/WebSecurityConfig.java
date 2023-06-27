@@ -25,8 +25,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @AllArgsConstructor
 public class WebSecurityConfig {
 
-    private final SecurityUser securityUser;
-
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
             "/swagger-ui.html",
@@ -48,8 +46,6 @@ public class WebSecurityConfig {
                                 authorization
                                         .mvcMatchers(AUTH_WHITELIST).permitAll()
                                         .mvcMatchers(HttpMethod.GET, "/ads").permitAll()
-//                                        .mvcMatchers(HttpMethod.DELETE, "/ads").hasRole("ADMIN")
-//                                        .mvcMatchers(ENDPOINTS_FOR_USERS).hasRole("USER")
                                         .mvcMatchers("/ads/**", "/users/**").authenticated())
                 .cors()
                 .and()

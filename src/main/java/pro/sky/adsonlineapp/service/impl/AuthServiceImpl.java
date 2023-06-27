@@ -23,13 +23,11 @@ import pro.sky.adsonlineapp.utils.UserMapperUtils;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    //    private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
     private final UserMapperUtils userMapperUtils;
     private final UserRepository userRepository;
     private final ValidationService validationService;
     private final UserDetailsService userDetailsService;
-
 
     @Override
     public boolean login(String userName, String password) {
@@ -43,10 +41,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-        var authenticated = encoder.matches(password, userDetails.getPassword());
-        if (authenticated)
-            System.setProperty("user", user.getUsername());
-        return authenticated;
+        return encoder.matches(password, userDetails.getPassword());
     }
 
     @Override
@@ -71,18 +66,5 @@ public class AuthServiceImpl implements AuthService {
             e.getStackTrace();
             return false;
         }
-
-//        if (manager.userExists(registerReq.getUsername())) {
-//            return false;
-//        }
-//        manager.createUser(
-//                User.builder()
-//                        .passwordEncoder(this.encoder::encode)
-//                        .password(registerReq.getPassword())
-//                        .username(registerReq.getUsername())
-//                        .roles(role.name())
-//                        .build());
-
-//        return true;
     }
 }

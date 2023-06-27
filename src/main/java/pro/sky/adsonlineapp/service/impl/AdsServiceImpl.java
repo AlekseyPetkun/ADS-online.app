@@ -14,12 +14,11 @@ import pro.sky.adsonlineapp.dto.ResponseWrapperAds;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.exceptions.ValidationException;
 import pro.sky.adsonlineapp.model.Ad;
-import pro.sky.adsonlineapp.model.Picture;
 import pro.sky.adsonlineapp.model.User;
 import pro.sky.adsonlineapp.repository.AdsRepository;
-import pro.sky.adsonlineapp.repository.PictureRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.AdsService;
+import pro.sky.adsonlineapp.service.PictureService;
 import pro.sky.adsonlineapp.service.ValidationService;
 import pro.sky.adsonlineapp.utils.AdsMappingUtils;
 import pro.sky.adsonlineapp.utils.FullAdsMappingUtils;
@@ -37,17 +36,12 @@ import static pro.sky.adsonlineapp.constants.Message.NOT_FOUND_ENTITY;
 @AllArgsConstructor
 public class AdsServiceImpl implements AdsService {
 
-    //    @Value("${path.to.pictures.folder}")
-//    private String adsImage;
-
     private final ValidationService validationService;
     private final AdsRepository adsRepository;
     private final UserRepository userRepository;
     private final AdsMappingUtils adsMapping;
     private final FullAdsMappingUtils fullAdsMapping;
-    private final PictureServiceImpl pictureService;
-    private final PictureRepository pictureRepository;
-
+    private final PictureService pictureService;
 
     @Override
     public ResponseWrapperAds getAllAds() {
@@ -169,16 +163,6 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public byte[] getImageById(String id) {
-
-        Picture picture = pictureRepository.findById(id).orElseThrow(()
-                -> new NotFoundEntityException(NOT_FOUND_ENTITY));
-        byte[] imageBytes = picture.getData();
-
-        return imageBytes;
-    }
-
-    @Override
     public boolean updateAdImage(Integer id, MultipartFile image) {
 
         String imageId = pictureService.addImage(image);
@@ -186,7 +170,6 @@ public class AdsServiceImpl implements AdsService {
                 .orElseThrow(() -> new NotFoundEntityException(NOT_FOUND_ENTITY));
 
         entity.setImagePath(imageId);
-        //userRepository.updateUser(user.getFirstName(), user.getLastName(), user.getPhone(), user.getEmail(), imageId, user.getId());
         adsRepository.save(entity);
 
         return true;

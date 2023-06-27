@@ -14,9 +14,25 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    /**
+     * Поиск пользователя по логину
+     * @param username логин пользователя
+     * @return найденный пользователь
+     */
     User findByUsername(String username);
+
+    /**
+     * Поиск пользователя по его email
+     * @param email email пользователя
+     * @return найденный пользователь
+     */
     Optional<User> findByEmail(String email);
 
+    /**
+     * Проверка пользователя по email
+     * @param email email пользователя
+     * @return true or false
+     */
     boolean existsByEmail(String email);
 
     @Modifying

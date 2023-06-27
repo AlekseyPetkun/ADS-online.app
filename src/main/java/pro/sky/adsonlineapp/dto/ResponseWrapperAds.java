@@ -15,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseWrapperAds {
-    // общее количество объявлений
-    @JsonProperty("count")
-    private Integer count;
 
-    @JsonProperty("results")
-    private List<AdsDto> results;
+    private Integer count; // общее количество объявлений
+    private List<AdsDto> results; // все найденные объявления
 }

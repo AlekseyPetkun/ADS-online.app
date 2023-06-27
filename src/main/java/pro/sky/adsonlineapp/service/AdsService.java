@@ -71,7 +71,12 @@ public interface AdsService {
      */
     ResponseWrapperAds findByDescriptionAd(String description);
 
-    byte[] getImageById(String id);
-
+    /**
+     * Изменить картинку объявления по его идентификатору
+     *
+     * @param id    идентификатор объявления
+     * @param image новая картинка объявления
+     * @return измененная картинка объявления
+     */
     boolean updateAdImage(Integer id, MultipartFile image);
 }

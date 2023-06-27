@@ -9,7 +9,6 @@ import pro.sky.adsonlineapp.dto.NewPassword;
 import pro.sky.adsonlineapp.dto.UserDto;
 import pro.sky.adsonlineapp.exceptions.NotFoundEntityException;
 import pro.sky.adsonlineapp.model.User;
-import pro.sky.adsonlineapp.repository.ImageRepository;
 import pro.sky.adsonlineapp.repository.UserRepository;
 import pro.sky.adsonlineapp.service.PictureService;
 import pro.sky.adsonlineapp.service.UserService;
@@ -28,7 +27,6 @@ import static pro.sky.adsonlineapp.constants.Message.*;
 public class UserServiceImpl implements UserService {
 
     private final PictureService pictureService;
-    private final ImageRepository imageRepository;
     private final UserRepository userRepository;
     private final UserMapperUtils userMapper;
     private final PasswordEncoder encoder;
@@ -45,6 +43,7 @@ public class UserServiceImpl implements UserService {
         if (encoder.matches(password.getCurrentPassword(), user.getPassword())) {
             user.setPassword(encoder.encode(password.getNewPassword()));
             userRepository.save(user);
+
             return true;
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -57,6 +56,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findByUsername(username);
         if (user != null) {
+
             return userMapper.mapToDto(user);
         } else {
             throw new NotFoundEntityException(NOT_FOUND_ENTITY);
@@ -74,13 +74,7 @@ public class UserServiceImpl implements UserService {
         userDB.setPhone(user.getPhone());
         userDB.setImage(user.getImage());
         userDB.setEmail(user.getEmail());
-//        User userEntity = userRepository.updateUser(
-//                user.getFirstName(),
-//                user.getLastName(),
-//                user.getPhone(),
-//                user.getEmail(),
-//                user.getImage(),
-//                userDB.getId());
+
         userRepository.save(userDB);
 
         return userMapper.mapToDto(userDB);
@@ -98,7 +92,6 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setImage(imageId);
-        //userRepository.updateUser(user.getFirstName(), user.getLastName(), user.getPhone(), user.getEmail(), imageId, user.getId());
         userRepository.save(user);
 
         return true;
