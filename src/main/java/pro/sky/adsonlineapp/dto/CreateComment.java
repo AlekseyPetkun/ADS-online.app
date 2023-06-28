@@ -5,14 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO авторизации.
+ * DTO создания комментария.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginReq {
+public class CreateComment {
 
-    private String password; // пароль
-    private String username; // логин
-
+    private String text; // текст комментария
 }

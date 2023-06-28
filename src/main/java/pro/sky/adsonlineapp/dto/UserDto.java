@@ -3,20 +3,19 @@ package pro.sky.adsonlineapp.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pro.sky.adsonlineapp.constants.Role;
 
 /**
- * DTO регистрации.
+ * DTO пользователей.
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RegisterReq {
+@NoArgsConstructor
+public class UserDto {
 
-    private String username; // логин
-    private String password; // пароль
+    private Integer id; // id пользователя
+    private String email; // логин пользователя
     private String firstName; // имя пользователя
     private String lastName; // фамилия пользователя
     private String phone; // телефон пользователя
-    private Role role; // роль пользователя
+    private String image; // ссылка на аватар пользователя
 }
