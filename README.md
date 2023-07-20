@@ -1,6 +1,8 @@
 ## ADS-online.app ##
 # Проект платформы по перепродаже вещей #
 
+![](https://github.com/AlekseyPetkun/ADS-online.app/blob/master/demo.gif)
+
 **Development team:**
 
 [Ольга Филиппова](https://github.com/AgentOlga "AgentOlga")\
