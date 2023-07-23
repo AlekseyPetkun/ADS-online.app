@@ -41,6 +41,9 @@ PostgreSQL\
 Lombok\
 JUnit\
 Mockito\
+Maven\
+Liquibase\
+Security\
 Docker
 
 \
