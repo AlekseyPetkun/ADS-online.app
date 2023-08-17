@@ -8,7 +8,7 @@
 [Ольга Филиппова](https://github.com/AgentOlga "AgentOlga")\
 [Никита Лаврентьев](https://github.com/NikitaLavrentiev "NikitaLavrentiev")\
 [Сергей Кузнецов](https://github.com/SerNike "SerNike")\
-[Алексей Петкун](https://github.com/Aleksey2710 "Aleksey2710")
+[Алексей Петкун](https://github.com/AlekseyPetkun "AlekseyPetkun")
 
 
 ## Бэкенд-часть проекта предполагает реализацию следующего функционала: ##
