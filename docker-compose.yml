@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  frontend:
+    container_name: "frontend"
+    image: ghcr.io/bizinmitya/front-react-avito:v1.17
+    build: ./
+    networks:
+      - alpine-net
+    ports:
+      - "3000:3000"
+  backend:
+    container_name: "backend"
+    build: ./
+    networks:
+      - alpine-net
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+  postgresql:
+    image: postgres:alpine3.17
+    networks:
+      - alpine-net
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USERNAME=brooklyn
+      - POSTGRES_DB=ADS-online.data
+networks:
+  alpine-net:
+    driver: bridge
